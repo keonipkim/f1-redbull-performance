@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Red Bull Racing Performance Dashboard</title>
+  <meta name="description" content="Client-side F1 performance dashboard for Red Bull Racing — seasons 2021–2025, drivers, circuits, and championship metrics." />
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='6' fill='%23121f45'/><path d='M6 22 L14 10 L18 16 L22 12 L26 22 Z' fill='%23f5c623'/></svg>" />
+  <link rel="stylesheet" href="css/styles.css" />
+
+  <!-- Third-party libraries (pinned versions via CDN) -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.9/dist/chart.umd.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/luxon@3.5.0/build/global/luxon.min.js"></script>
+</head>
+<body>
+
+  <!-- ===== Header: brand chrome + global season filter ===== -->
+  <header class="app-header">
+    <div class="inner">
+      <div class="brand">
+        <h1>Red Bull Racing — Performance Dashboard</h1>
+        <p>Formula 1 seasons 2021–2025 · sample dataset</p>
+      </div>
+      <div class="header-controls">
+        <label for="season-select">Season</label>
+        <select id="season-select" class="select" aria-label="Select season"></select>
+        <button id="theme-toggle" class="theme-toggle" type="button" aria-label="Toggle color theme">☾ Dark</button>
+      </div>
+    </div>
+  </header>
+
+  <!-- ===== Tab navigation ===== -->
+  <nav class="tabs" aria-label="Dashboard sections">
+    <div class="inner" role="tablist">
+      <button class="tab" role="tab" data-view="overview" aria-selected="true">Overview</button>
+      <button class="tab" role="tab" data-view="drivers" aria-selected="false">Drivers &amp; Races</button>
+      <button class="tab" role="tab" data-view="circuits" aria-selected="false">Circuits</button>
+    </div>
+  </nav>
+
+  <main>
+
+    <!-- =================== Overview =================== -->
+    <section id="view-overview" class="view">
+      <div class="view-intro">
+        <h2>Season overview</h2>
+        <p id="overview-sub"></p>
+      </div>
+
+      <div id="overview-tiles" class="tiles"></div>
+
+      <div class="grid-2">
+        <div class="card full">
+          <h3>Championship points, race by race</h3>
+          <p class="sub">Cumulative points per Red Bull driver across the season</p>
+          <div class="chart-box"><canvas id="chart-cumulative"></canvas></div>
+          <details class="data-table"><summary>View data as table</summary><div id="table-cumulative"></div></details>
+        </div>
+
+        <div class="card full">
+          <h3>Points scored per round</h3>
+          <p class="sub">Team points each race weekend, split by driver (sprint and fastest-lap points included)</p>
+          <div class="chart-box"><canvas id="chart-rounds"></canvas></div>
+          <details class="data-table"><summary>View data as table</summary><div id="table-rounds"></div></details>
+        </div>
+
+        <div class="card">
+          <h3>Constructors' championship</h3>
+          <p class="sub">Final points by team (smaller teams grouped as Others)</p>
+          <div class="chart-box tall"><canvas id="chart-constructors"></canvas></div>
+          <details class="data-table"><summary>View data as table</summary><div id="table-constructors"></div></details>
+        </div>
+
+        <div class="card">
+          <h3>Where the cars finished</h3>
+          <p class="sub">Every Red Bull car-race this season, bucketed by result</p>
+          <div class="chart-box tall"><canvas id="chart-distribution"></canvas></div>
+          <details class="data-table"><summary>View data as table</summary><div id="table-distribution"></div></details>
+        </div>
+
+        <div class="card">
+          <h3>Driver profiles</h3>
+          <p class="sub">Editorial ratings (0–10) per performance dimension</p>
+          <div class="chart-box tall"><canvas id="chart-radar"></canvas></div>
+          <details class="data-table"><summary>View data as table</summary><div id="table-radar"></div></details>
+        </div>
+
+        <div class="card">
+          <h3>Drivers' championship</h3>
+          <p class="sub">Red Bull drivers among the season's top scorers</p>
+          <div id="table-driver-standings"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- =================== Drivers & Races =================== -->
+    <section id="view-drivers" class="view" hidden>
+      <div class="view-intro">
+        <h2>Driver &amp; race explorer</h2>
+        <p>Race-by-race results for each Red Bull driver in the selected season</p>
+      </div>
+
+      <div class="subfilter">
+        <label for="driver-select">Driver</label>
+        <select id="driver-select" class="select" aria-label="Select driver"></select>
+      </div>
+
+      <div id="driver-tiles" class="tiles"></div>
+
+      <div class="grid-2">
+        <div class="card">
+          <h3>Places gained or lost</h3>
+          <p class="sub">Race finish vs grid slot — upward blue bars mean positions gained</p>
+          <div class="chart-box"><canvas id="chart-driver-delta"></canvas></div>
+        </div>
+
+        <div class="card">
+          <h3>Points accumulation</h3>
+          <p class="sub">Running championship total after each round</p>
+          <div class="chart-box"><canvas id="chart-driver-cumulative"></canvas></div>
+        </div>
+
+        <div class="card full">
+          <h3>Race results</h3>
+          <p class="sub">Full season record — grid, finish, points and notes per Grand Prix</p>
+          <div id="table-driver-races"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- =================== Circuits =================== -->
+    <section id="view-circuits" class="view" hidden>
+      <div class="view-intro">
+        <h2>Circuit performance</h2>
+        <p id="circuit-sub"></p>
+      </div>
+
+      <div class="subfilter">
+        <label for="circuit-select">Circuit</label>
+        <select id="circuit-select" class="select" aria-label="Select circuit"></select>
+      </div>
+
+      <div id="circuit-tiles" class="tiles"></div>
+
+      <div class="grid-2">
+        <div class="card">
+          <h3>Verstappen's finishes here</h3>
+          <p class="sub">Finishing position per visit (P1 at the top; gaps are DNFs)</p>
+          <div class="chart-box"><canvas id="chart-circuit-pos"></canvas></div>
+        </div>
+
+        <div class="card">
+          <h3>Team points per event</h3>
+          <p class="sub">Combined Red Bull points each time the circuit was visited</p>
+          <div class="chart-box"><canvas id="chart-circuit-points"></canvas></div>
+        </div>
+
+        <div class="card full">
+          <h3>Results at this circuit</h3>
+          <p class="sub">All dataset events at the selected venue</p>
+          <div id="table-circuit"></div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <footer>
+    <p id="footer-note"></p>
+  </footer>
+
+  <!-- App modules (plain scripts, load order matters) -->
+  <script src="js/config.js"></script>
+  <script src="js/data.js"></script>
+  <script src="js/charts.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>

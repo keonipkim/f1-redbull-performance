@@ -1,0 +1,385 @@
+/* ==========================================================================
+   Red Bull Racing Performance Dashboard — stylesheet
+   Minimal, text-focused chrome. All colors are defined as custom properties
+   so the light/dark themes swap in one place; charts read the same variables
+   at render time (see js/charts.js -> cssVar()).
+   ========================================================================== */
+
+/* ---- Theme tokens ------------------------------------------------------- */
+
+:root {
+  /* Surfaces & ink */
+  --page: #f9f9f7;
+  --surface: #fcfcfb;
+  --ink: #0b0b0b;
+  --ink-2: #52514e;
+  --muted: #898781;
+  --grid: #e1e0d9;
+  --axis: #c3c2b7;
+  --border: rgba(11, 11, 11, 0.10);
+
+  /* Categorical series slots (validated palette, light mode) */
+  --series-1: #2a78d6;  /* blue    — Red Bull / primary driver */
+  --series-2: #1baf7a;  /* aqua    — Mercedes */
+  --series-3: #eda100;  /* yellow  — teammate */
+  --series-4: #008300;  /* green   — Aston Martin */
+  --series-5: #4a3aa7;  /* violet  — Williams / 3rd driver */
+  --series-6: #e34948;  /* red     — Ferrari */
+  --series-7: #e87ba4;  /* magenta — Alpine */
+  --series-8: #eb6834;  /* orange  — McLaren */
+  --series-other: #a5a49d;
+
+  /* Diverging pair (positions gained / lost) */
+  --div-pos: #2a78d6;
+  --div-neg: #e34948;
+  --div-mid: #c3c2b7;
+
+  /* Ordinal ramp (finish-distribution doughnut, best -> worst) */
+  --ord-1: #104281;
+  --ord-2: #256abf;
+  --ord-3: #5598e7;
+  --ord-4: #86b6ef;
+
+  /* Deltas on stat tiles */
+  --delta-up: #006300;
+  --delta-down: #d03b3b;
+
+  /* Red Bull brand chrome (header only — never used for data marks) */
+  --rb-navy: #121f45;
+  --rb-navy-2: #1d2d5c;
+  --rb-red: #d0021b;
+  --rb-yellow: #f5c623;
+
+  --tooltip-bg: rgba(11, 11, 11, 0.92);
+  --tooltip-ink: #ffffff;
+}
+
+[data-theme="dark"] {
+  --page: #0d0d0d;
+  --surface: #1a1a19;
+  --ink: #ffffff;
+  --ink-2: #c3c2b7;
+  --muted: #898781;
+  --grid: #2c2c2a;
+  --axis: #383835;
+  --border: rgba(255, 255, 255, 0.10);
+
+  /* Same hues, re-stepped for the dark surface (validated as a set) */
+  --series-1: #3987e5;
+  --series-2: #199e70;
+  --series-3: #c98500;
+  --series-4: #008300;
+  --series-5: #9085e9;
+  --series-6: #e66767;
+  --series-7: #d55181;
+  --series-8: #d95926;
+  --series-other: #6f6e68;
+
+  --div-pos: #3987e5;
+  --div-neg: #e66767;
+  --div-mid: #383835;
+
+  --ord-1: #9ec5f4;
+  --ord-2: #6da7ec;
+  --ord-3: #3987e5;
+  --ord-4: #1c5cab;
+
+  --delta-up: #0ca30c;
+  --delta-down: #e66767;
+
+  --tooltip-bg: rgba(252, 252, 251, 0.95);
+  --tooltip-ink: #0b0b0b;
+}
+
+/* ---- Base --------------------------------------------------------------- */
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+html { -webkit-text-size-adjust: 100%; }
+
+body {
+  font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
+  background: var(--page);
+  color: var(--ink);
+  font-size: 15px;
+  line-height: 1.5;
+}
+
+button, select { font: inherit; color: inherit; }
+
+/* ---- Header (Red Bull brand chrome) ------------------------------------- */
+
+.app-header {
+  background: var(--rb-navy);
+  color: #fff;
+  /* Brand accent stripe along the bottom edge */
+  border-bottom: 3px solid var(--rb-red);
+  box-shadow: inset 0 -6px 0 -3px var(--rb-yellow);
+}
+
+.app-header .inner {
+  max-width: 1180px;
+  margin: 0 auto;
+  padding: 18px 20px 21px;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 12px 20px;
+}
+
+.brand h1 { font-size: 18px; font-weight: 700; letter-spacing: 0.01em; }
+.brand p  { font-size: 12.5px; color: rgba(255, 255, 255, 0.72); }
+
+.header-controls {
+  margin-left: auto;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.header-controls label {
+  font-size: 12.5px;
+  color: rgba(255, 255, 255, 0.72);
+}
+
+.select {
+  appearance: none;
+  background: var(--rb-navy-2);
+  color: #fff;
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  border-radius: 6px;
+  padding: 6px 28px 6px 10px;
+  font-weight: 600;
+  cursor: pointer;
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='10' height='6' viewBox='0 0 10 6'><path d='M1 1l4 4 4-4' fill='none' stroke='white' stroke-width='1.5'/></svg>");
+  background-repeat: no-repeat;
+  background-position: right 10px center;
+}
+
+.theme-toggle {
+  background: var(--rb-navy-2);
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  border-radius: 6px;
+  padding: 6px 10px;
+  cursor: pointer;
+  font-size: 13px;
+}
+
+/* ---- Tab navigation ------------------------------------------------------ */
+
+.tabs {
+  background: var(--surface);
+  border-bottom: 1px solid var(--border);
+  position: sticky;
+  top: 0;
+  z-index: 5;
+}
+
+.tabs .inner {
+  max-width: 1180px;
+  margin: 0 auto;
+  padding: 0 20px;
+  display: flex;
+  gap: 4px;
+  overflow-x: auto;
+}
+
+.tab {
+  background: none;
+  border: 0;
+  border-bottom: 2px solid transparent;
+  padding: 11px 12px 9px;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--muted);
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.tab:hover { color: var(--ink-2); }
+.tab[aria-selected="true"] { color: var(--ink); border-bottom-color: var(--rb-red); }
+
+/* ---- Layout -------------------------------------------------------------- */
+
+main {
+  max-width: 1180px;
+  margin: 0 auto;
+  padding: 20px 20px 48px;
+}
+
+.view[hidden] { display: none; }
+
+.view-intro { margin: 2px 0 16px; }
+.view-intro h2 { font-size: 16px; font-weight: 700; }
+.view-intro p  { font-size: 13px; color: var(--ink-2); }
+
+/* Secondary filter row (driver / circuit selectors) */
+.subfilter {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px 12px;
+  margin-bottom: 16px;
+}
+
+.subfilter label { font-size: 13px; color: var(--ink-2); font-weight: 600; }
+
+.subfilter .select {
+  background-color: var(--surface);
+  color: var(--ink);
+  border-color: var(--border);
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='10' height='6' viewBox='0 0 10 6'><path d='M1 1l4 4 4-4' fill='none' stroke='%23898781' stroke-width='1.5'/></svg>");
+}
+
+/* ---- Stat tiles ----------------------------------------------------------- */
+
+.tiles {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(148px, 1fr));
+  gap: 12px;
+  margin-bottom: 20px;
+}
+
+.tile {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 12px 14px;
+}
+
+.tile .label { font-size: 12px; color: var(--muted); font-weight: 600; }
+.tile .value { font-size: 26px; font-weight: 650; line-height: 1.25; }
+.tile .delta { font-size: 12px; font-weight: 600; }
+.tile .delta.up   { color: var(--delta-up); }
+.tile .delta.down { color: var(--delta-down); }
+.tile .delta.flat { color: var(--muted); }
+
+/* ---- Cards & chart boxes --------------------------------------------------- */
+
+.grid-2 {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+  margin-bottom: 16px;
+}
+
+.card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 16px 18px;
+  min-width: 0; /* let canvases shrink inside the grid */
+}
+
+.card.full { grid-column: 1 / -1; }
+
+.card h3 { font-size: 14px; font-weight: 700; }
+.card .sub { font-size: 12px; color: var(--muted); margin-bottom: 10px; }
+
+/* Fixed-height plot area; sized to include the x-axis band so the axis never
+   gets clipped or spawns a nested scrollbar. */
+.chart-box { position: relative; height: 300px; }
+.chart-box.tall { height: 340px; }
+
+/* ---- Data tables (the no-hover / screen-reader twin of every chart) -------- */
+
+details.data-table { margin-top: 10px; border-top: 1px solid var(--border); }
+
+details.data-table summary {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--muted);
+  padding: 8px 0 2px;
+  cursor: pointer;
+  user-select: none;
+}
+
+.table-scroll { overflow-x: auto; }
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13px;
+  margin-top: 6px;
+}
+
+th, td {
+  text-align: left;
+  padding: 6px 10px 6px 0;
+  border-bottom: 1px solid var(--grid);
+  white-space: nowrap;
+}
+
+th { font-size: 11.5px; color: var(--muted); font-weight: 600; }
+
+td.num, th.num { text-align: right; font-variant-numeric: tabular-nums; }
+
+tr.highlight td { font-weight: 650; }
+
+/* Swatch that carries series identity next to text (text never wears the color) */
+.swatch {
+  display: inline-block;
+  width: 10px;
+  height: 10px;
+  border-radius: 2px;
+  margin-right: 7px;
+  vertical-align: baseline;
+}
+
+/* Small informational pills in race tables */
+.pill {
+  display: inline-block;
+  font-size: 10.5px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  border: 1px solid var(--border);
+  color: var(--ink-2);
+  border-radius: 999px;
+  padding: 0 7px;
+  margin-right: 4px;
+}
+
+.pill.dnf { color: var(--delta-down); border-color: currentColor; }
+
+/* ---- Footer ---------------------------------------------------------------- */
+
+footer {
+  max-width: 1180px;
+  margin: 0 auto;
+  padding: 0 20px 32px;
+  font-size: 12px;
+  color: var(--muted);
+}
+
+/* ---- Loading / error state -------------------------------------------------- */
+
+.notice {
+  max-width: 720px;
+  margin: 48px auto;
+  padding: 20px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  font-size: 14px;
+  color: var(--ink-2);
+}
+
+.notice code {
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: 12.5px;
+  background: var(--page);
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  padding: 1px 5px;
+}
+
+/* ---- Responsive -------------------------------------------------------------- */
+
+@media (max-width: 860px) {
+  .grid-2 { grid-template-columns: 1fr; }
+  .chart-box { height: 260px; }
+  .chart-box.tall { height: 300px; }
+  .tile .value { font-size: 22px; }
+  .app-header .inner { padding: 14px 16px 17px; }
+  main { padding: 16px 14px 40px; }
+}
