@@ -1,17 +1,17 @@
-# Red Bull Racing Performance Dashboard
+# F1 Performance Dashboard
 
-Interactive client-side web dashboard analyzing **Red Bull Racing's** Formula 1 performance from 2021 to the current 2026 season, with strong emphasis on Max Verstappen's championship runs.
+Interactive client-side web dashboard analyzing Formula 1 constructor performance from 2021 to the current 2026 season, with strong emphasis on championship runs and driver-level comparisons.
 
 Built as a single-page application using vanilla HTML, CSS, and JavaScript.
 
 ### Key Features
 - Global season selector (2021–2026, including the in-progress 2026 season)
 - Championship overview with wins, podiums, points, poles, and fastest laps
-- Head-to-head comparison of any two Red Bull drivers in a season (default: Verstappen vs the current teammate)
+- Head-to-head comparison of any two team drivers in a season
 - Driver performance explorer with places gained/lost analysis
 - Circuit-by-circuit historical performance
 - Interactive visualizations including line charts, stacked bars, radar, and doughnut charts
-- Responsive design with light/dark theme support
+- Responsive design with light/dark theme support (dark by default)
 
 ### Live Demo
 https://keonikim.com/f1-redbull-performance/

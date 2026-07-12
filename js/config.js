@@ -4,8 +4,8 @@
  * All data colors live in CSS custom properties (css/styles.css) so light and
  * dark themes swap in one place. This module only maps *entities* (teams,
  * driver slots, ordinal buckets) onto those variables. Color follows the
- * entity, never its current rank: Red Bull is always --series-1 blue,
- * Ferrari always --series-6 red, etc., no matter how a season shakes out.
+ * entity, never its current rank: the focus team is always --series-1,
+ * Ferrari always --series-6, etc., no matter how a season shakes out.
  * ========================================================================== */
 
 "use strict";

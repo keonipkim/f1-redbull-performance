@@ -1,11 +1,16 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="dark">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Red Bull Racing Performance Dashboard</title>
-  <meta name="description" content="Client-side F1 performance dashboard for Red Bull Racing — seasons 2021–2026, drivers, head-to-head comparisons, circuits, and championship metrics." />
-  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='6' fill='%23121f45'/><path d='M6 22 L14 10 L18 16 L22 12 L26 22 Z' fill='%23f5c623'/></svg>" />
+  <title>F1 Performance Dashboard · Team Analysis 2021–2026</title>
+  <meta name="description" content="Client-side Formula 1 performance dashboard analyzing one constructor’s results across seasons 2021–2026 — drivers, head-to-head comparisons, circuits, and championship metrics." />
+  <meta name="theme-color" content="#08080a" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <!-- Abstract chevron mark — original geometric icon, not a team logo -->
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='8' fill='%230c0c0e'/><path d='M8 22 L16 10 L20 16 L24 12' fill='none' stroke='%23e10600' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'/><path d='M10 22 L18 12' fill='none' stroke='%23f0a500' stroke-width='1.5' stroke-linecap='round' opacity='0.7'/></svg>" />
   <link rel="stylesheet" href="css/styles.css" />
 
   <!-- Third-party libraries (pinned versions via CDN) -->
@@ -14,12 +19,20 @@
 </head>
 <body>
 
-  <!-- ===== Header: brand chrome + global season filter ===== -->
+  <!-- ===== Header: original chrome + global season filter ===== -->
   <header class="app-header">
     <div class="inner">
       <div class="brand">
-        <h1>Red Bull Racing — Performance Dashboard</h1>
-        <p>Formula 1 seasons 2021–2026 · official race records</p>
+        <div class="brand-mark" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M4 18 L12 6 L15.5 12 L20 8" stroke="#e10600" stroke-width="2.25" stroke-linecap="round" stroke-linejoin="round"/>
+            <path d="M6 18 L13.5 8.5" stroke="#f0a500" stroke-width="1.5" stroke-linecap="round" opacity="0.75"/>
+          </svg>
+        </div>
+        <div class="brand-text">
+          <h1>F1 Performance Dashboard</h1>
+          <p>Team analysis · seasons 2021–2026 · race-record driven</p>
+        </div>
       </div>
       <div class="header-controls">
         <label for="season-select">Season</label>
@@ -53,7 +66,7 @@
       <div class="grid-2">
         <div class="card full">
           <h3>Championship points, race by race</h3>
-          <p class="sub">Cumulative points per Red Bull driver across the season</p>
+          <p class="sub">Cumulative points per team driver across the season</p>
           <div class="chart-box"><canvas id="chart-cumulative"></canvas></div>
           <details class="data-table"><summary>View data as table</summary><div id="table-cumulative"></div></details>
         </div>
@@ -74,7 +87,7 @@
 
         <div class="card">
           <h3>Where the cars finished</h3>
-          <p class="sub">Every Red Bull car-race this season, bucketed by result</p>
+          <p class="sub">Every team car-race this season, bucketed by result</p>
           <div class="chart-box tall"><canvas id="chart-distribution"></canvas></div>
           <details class="data-table"><summary>View data as table</summary><div id="table-distribution"></div></details>
         </div>
@@ -88,7 +101,7 @@
 
         <div class="card">
           <h3>Drivers' championship</h3>
-          <p class="sub">Red Bull drivers among the season's top scorers</p>
+          <p class="sub">Team drivers among the season's top scorers</p>
           <div id="table-driver-standings"></div>
         </div>
       </div>
@@ -98,7 +111,7 @@
     <section id="view-drivers" class="view" hidden>
       <div class="view-intro">
         <h2>Driver &amp; race explorer</h2>
-        <p>Race-by-race results for each Red Bull driver in the selected season</p>
+        <p>Race-by-race results for each team driver in the selected season</p>
       </div>
 
       <div class="subfilter">
@@ -111,7 +124,7 @@
       <div class="grid-2">
         <div class="card">
           <h3>Places gained or lost</h3>
-          <p class="sub">Race finish vs grid slot — upward blue bars mean positions gained</p>
+          <p class="sub">Race finish vs grid slot — upward bars mean positions gained</p>
           <div class="chart-box"><canvas id="chart-driver-delta"></canvas></div>
         </div>
 
@@ -189,7 +202,7 @@
 
         <div class="card">
           <h3>Team points per event</h3>
-          <p class="sub">Combined Red Bull points each time the circuit was visited</p>
+          <p class="sub">Combined team points each time the circuit was visited</p>
           <div class="chart-box"><canvas id="chart-circuit-points"></canvas></div>
         </div>
 

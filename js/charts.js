@@ -23,8 +23,14 @@ const CHARTS = {
     return this.registry[canvasId];
   },
 
+  /** Shared UI font stack for chart labels (matches css/styles.css). */
+  fontFamily() {
+    return '"Inter", system-ui, -apple-system, "Segoe UI", sans-serif';
+  },
+
   /** Base options shared by every cartesian chart. */
   baseOptions() {
+    const fam = this.fontFamily();
     return {
       responsive: true,
       maintainAspectRatio: false,
@@ -36,7 +42,8 @@ const CHARTS = {
             usePointStyle: true,
             boxWidth: 8,
             boxHeight: 8,
-            font: { size: 12 },
+            padding: 14,
+            font: { size: 12, family: fam, weight: "500" },
           },
         },
         tooltip: this.tooltipOptions(),
@@ -45,30 +52,44 @@ const CHARTS = {
         x: {
           grid: { display: false },
           border: { color: cssVar("--axis") },
-          ticks: { color: cssVar("--muted"), font: { size: 11 }, maxRotation: 0, autoSkipPadding: 8 },
+          ticks: {
+            color: cssVar("--muted"),
+            font: { size: 11, family: fam },
+            maxRotation: 0,
+            autoSkipPadding: 8,
+          },
         },
         y: {
-          grid: { color: cssVar("--grid"), drawTicks: false },
+          grid: { color: cssVar("--grid"), drawTicks: false, lineWidth: 1 },
           border: { display: false },
-          ticks: { color: cssVar("--muted"), font: { size: 11 }, padding: 6 },
+          ticks: {
+            color: cssVar("--muted"),
+            font: { size: 11, family: fam },
+            padding: 8,
+          },
         },
       },
     };
   },
 
   tooltipOptions() {
+    const fam = this.fontFamily();
     return {
       backgroundColor: cssVar("--tooltip-bg"),
       titleColor: cssVar("--tooltip-ink"),
       bodyColor: cssVar("--tooltip-ink"),
-      titleFont: { size: 12, weight: "600" },
-      bodyFont: { size: 12 },
-      padding: 10,
-      cornerRadius: 6,
+      titleFont: { size: 12, weight: "600", family: fam },
+      bodyFont: { size: 12, family: fam },
+      padding: 12,
+      cornerRadius: 8,
       boxWidth: 12,
       boxHeight: 2,   // short stroke keys, not filled boxes
-      boxPadding: 4,
+      boxPadding: 5,
       usePointStyle: false,
+      borderColor: cssVar("--border-strong"),
+      borderWidth: 1,
+      caretSize: 5,
+      displayColors: true,
     };
   },
 
@@ -84,7 +105,14 @@ const CHARTS = {
       const { top, bottom } = chart.chartArea;
       const ctx = chart.ctx;
       ctx.save();
-      ctx.strokeStyle = cssVar("--axis");
+      // Soft accent wash behind a crisp axis stroke — speed-read feel
+      ctx.strokeStyle = cssVar("--accent-soft");
+      ctx.lineWidth = 6;
+      ctx.beginPath();
+      ctx.moveTo(x, top);
+      ctx.lineTo(x, bottom);
+      ctx.stroke();
+      ctx.strokeStyle = cssVar("--accent-line");
       ctx.lineWidth = 1;
       ctx.beginPath();
       ctx.moveTo(x, top);
@@ -104,7 +132,7 @@ const CHARTS = {
       const ctx = chart.ctx;
       const used = [];
       ctx.save();
-      ctx.font = "600 11px system-ui, -apple-system, sans-serif";
+      ctx.font = '600 11px "Inter", system-ui, -apple-system, sans-serif';
       ctx.fillStyle = cssVar("--ink-2");
       ctx.textAlign = "left";
       chart.data.datasets.forEach((ds, i) => {
@@ -134,7 +162,7 @@ const CHARTS = {
     afterDatasetsDraw(chart) {
       const ctx = chart.ctx;
       ctx.save();
-      ctx.font = "600 11px system-ui, -apple-system, sans-serif";
+      ctx.font = '600 11px "Inter", system-ui, -apple-system, sans-serif';
       ctx.fillStyle = cssVar("--ink-2");
       ctx.textAlign = "left";
       ctx.textBaseline = "middle";
@@ -152,6 +180,7 @@ const CHARTS = {
   /** Multi-series line chart with crosshair + end labels. */
   line(canvasId, labels, series, { yTitle, reverse = false, yMax, endLabelFmt } = {}) {
     const opts = this.baseOptions();
+    const fam = this.fontFamily();
     opts.layout = { padding: { right: 52 } }; // room for the end labels
     if (reverse) {
       opts.scales.y.reverse = true;
@@ -160,7 +189,15 @@ const CHARTS = {
       opts.scales.y.ticks.stepSize = 5;
       opts.scales.y.ticks.callback = (v) => `P${v}`;
     }
-    if (yTitle) opts.scales.y.title = { display: true, text: yTitle, color: cssVar("--muted"), font: { size: 11 } };
+    if (yTitle) {
+      opts.scales.y.title = {
+        display: true,
+        text: yTitle,
+        color: cssVar("--muted"),
+        font: { size: 11, family: fam, weight: "600" },
+        padding: { bottom: 4 },
+      };
+    }
     opts.plugins.legend.display = series.length > 1;
     opts.plugins.legend.labels.pointStyle = "line";
 
@@ -172,17 +209,18 @@ const CHARTS = {
           label: s.label,
           data: s.data,
           borderColor: s.color,
-          backgroundColor: s.fill ? withAlpha(s.color, 0.1) : "transparent",
-          fill: !!s.fill,
-          borderWidth: 2,
-          tension: 0.25,
+          backgroundColor: s.fill !== false ? withAlpha(s.color, 0.08) : "transparent",
+          fill: s.fill !== false && series.length === 1,
+          borderWidth: 2.5,
+          tension: 0.28,
           spanGaps: false,
-          pointRadius: s.showPoints ? 4 : 0,
-          pointHoverRadius: 5,
-          pointHitRadius: 24, // generous hit target — never just the painted pixels
+          pointRadius: s.showPoints ? 4.5 : 0,
+          pointHoverRadius: 6,
+          pointHitRadius: 24,
           pointBackgroundColor: s.color,
-          pointBorderColor: cssVar("--surface"), // 2px surface ring
+          pointBorderColor: cssVar("--surface"),
           pointBorderWidth: 2,
+          pointHoverBorderWidth: 2,
         })),
       },
       options: opts,
@@ -198,11 +236,20 @@ const CHARTS = {
   /** Vertical bars; pass multiple series with `stacked: true` for a stack. */
   bar(canvasId, labels, series, { stacked = false, yTitle, tooltipTitle } = {}) {
     const opts = this.baseOptions();
+    const fam = this.fontFamily();
     opts.scales.x.stacked = stacked;
     opts.scales.y.stacked = stacked;
     opts.plugins.legend.display = series.length > 1;
     opts.plugins.legend.labels.pointStyle = "rect";
-    if (yTitle) opts.scales.y.title = { display: true, text: yTitle, color: cssVar("--muted"), font: { size: 11 } };
+    if (yTitle) {
+      opts.scales.y.title = {
+        display: true,
+        text: yTitle,
+        color: cssVar("--muted"),
+        font: { size: 11, family: fam, weight: "600" },
+        padding: { bottom: 4 },
+      };
+    }
     if (tooltipTitle) opts.plugins.tooltip.callbacks = { title: (items) => tooltipTitle(items[0].dataIndex) };
 
     return this.mount(canvasId, {
@@ -213,9 +260,12 @@ const CHARTS = {
           label: s.label,
           data: s.data,
           backgroundColor: s.colors || s.color,
-          maxBarThickness: 20,
+          hoverBackgroundColor: s.colors
+            ? undefined
+            : (s.color ? withAlpha(s.color, 0.85) : undefined),
+          maxBarThickness: 22,
           // Round the data end only; in a stack, only the top-most dataset.
-          borderRadius: !stacked || i === series.length - 1 ? 4 : 0,
+          borderRadius: !stacked || i === series.length - 1 ? 5 : 0,
           borderSkipped: stacked ? false : "start",
           // 2px surface gap between stacked segments.
           borderColor: stacked ? cssVar("--surface") : "transparent",
@@ -230,45 +280,62 @@ const CHARTS = {
   /** Horizontal bar with entity colors and direct value labels. */
   hbar(canvasId, labels, values, colors, { xTitle } = {}) {
     const opts = this.baseOptions();
+    const fam = this.fontFamily();
     opts.indexAxis = "y";
     opts.interaction = { mode: "nearest", intersect: true };
     opts.layout = { padding: { right: 56 } }; // room for the value labels
     opts.plugins.legend.display = false;      // identity is in the row labels
     // Swap grid roles for the horizontal orientation.
     opts.scales.x = {
-      grid: { color: cssVar("--grid"), drawTicks: false },
+      grid: { color: cssVar("--grid"), drawTicks: false, lineWidth: 1 },
       border: { display: false },
-      ticks: { color: cssVar("--muted"), font: { size: 11 } },
-      title: xTitle ? { display: true, text: xTitle, color: cssVar("--muted"), font: { size: 11 } } : undefined,
+      ticks: { color: cssVar("--muted"), font: { size: 11, family: fam } },
+      title: xTitle
+        ? { display: true, text: xTitle, color: cssVar("--muted"), font: { size: 11, family: fam, weight: "600" } }
+        : undefined,
     };
     opts.scales.y = {
       grid: { display: false },
       border: { color: cssVar("--axis") },
-      ticks: { color: cssVar("--ink-2"), font: { size: 12 } },
+      ticks: { color: cssVar("--ink-2"), font: { size: 12, family: fam, weight: "500" } },
     };
 
     return this.mount(canvasId, {
       type: "bar",
       data: {
         labels,
-        datasets: [{ data: values, backgroundColor: colors, maxBarThickness: 20, borderRadius: 4, borderSkipped: "start" }],
+        datasets: [{
+          data: values,
+          backgroundColor: colors,
+          maxBarThickness: 22,
+          borderRadius: 5,
+          borderSkipped: "start",
+        }],
       },
       options: opts,
       plugins: [this.hbarValues],
     });
   },
 
-  /** Doughnut with 2px surface gaps between segments. */
+  /** Doughnut with surface gaps between segments. */
   doughnut(canvasId, labels, values, colors) {
+    const fam = this.fontFamily();
     const opts = {
       responsive: true,
       maintainAspectRatio: false,
-      cutout: "62%",
+      cutout: "64%",
       plugins: {
         legend: {
           // Right of the ring on wide screens; below it on phones.
           position: window.innerWidth < 640 ? "bottom" : "right",
-          labels: { color: cssVar("--ink-2"), usePointStyle: true, boxWidth: 8, boxHeight: 8, font: { size: 12 } },
+          labels: {
+            color: cssVar("--ink-2"),
+            usePointStyle: true,
+            boxWidth: 8,
+            boxHeight: 8,
+            padding: 12,
+            font: { size: 12, family: fam, weight: "500" },
+          },
         },
         tooltip: this.tooltipOptions(),
       },
@@ -280,23 +347,32 @@ const CHARTS = {
         datasets: [{
           data: values,
           backgroundColor: colors,
-          borderColor: cssVar("--surface"), // the surface gap between segments
-          borderWidth: 2,
-          hoverOffset: 4,
+          borderColor: cssVar("--surface"),
+          borderWidth: 3,
+          hoverOffset: 6,
+          hoverBorderWidth: 3,
         }],
       },
       options: opts,
     });
   },
 
-  /** Radar for driver skill profiles: 2px lines, 10% washes, ringed points. */
+  /** Radar for driver skill profiles: bold lines, soft washes, ringed points. */
   radar(canvasId, axes, series) {
+    const fam = this.fontFamily();
     const opts = {
       responsive: true,
       maintainAspectRatio: false,
       plugins: {
         legend: {
-          labels: { color: cssVar("--ink-2"), usePointStyle: true, pointStyle: "line", boxWidth: 14, font: { size: 12 } },
+          labels: {
+            color: cssVar("--ink-2"),
+            usePointStyle: true,
+            pointStyle: "line",
+            boxWidth: 14,
+            padding: 12,
+            font: { size: 12, family: fam, weight: "500" },
+          },
         },
         tooltip: this.tooltipOptions(),
       },
@@ -304,10 +380,18 @@ const CHARTS = {
         r: {
           min: 0,
           max: 10,
-          ticks: { stepSize: 2, color: cssVar("--muted"), backdropColor: "transparent", font: { size: 10 } },
+          ticks: {
+            stepSize: 2,
+            color: cssVar("--muted"),
+            backdropColor: "transparent",
+            font: { size: 10, family: fam },
+          },
           grid: { color: cssVar("--grid") },
           angleLines: { color: cssVar("--grid") },
-          pointLabels: { color: cssVar("--ink-2"), font: { size: 11 } },
+          pointLabels: {
+            color: cssVar("--ink-2"),
+            font: { size: 11, family: fam, weight: "500" },
+          },
         },
       },
     };
@@ -319,9 +403,10 @@ const CHARTS = {
           label: s.label,
           data: s.data,
           borderColor: s.color,
-          backgroundColor: withAlpha(s.color, 0.1),
-          borderWidth: 2,
-          pointRadius: 3,
+          backgroundColor: withAlpha(s.color, 0.14),
+          borderWidth: 2.5,
+          pointRadius: 3.5,
+          pointHoverRadius: 5,
           pointHitRadius: 16,
           pointBackgroundColor: s.color,
           pointBorderColor: cssVar("--surface"),

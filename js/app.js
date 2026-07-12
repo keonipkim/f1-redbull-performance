@@ -494,11 +494,12 @@ function switchView(view) {
 }
 
 function initTheme() {
-  // Precedence: ?theme= URL param (deep links) > stored choice > OS preference.
+  // Precedence: ?theme= URL param (deep links) > stored choice > dark default
+  // (portfolio look is dark-first with high-contrast red accents).
   const param = new URLSearchParams(location.search).get("theme");
   const stored = localStorage.getItem("rbr-theme");
   const preferred = (param === "light" || param === "dark" ? param : null) ||
-    stored || (matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light");
+    stored || "dark";
   document.documentElement.dataset.theme = preferred;
   updateThemeButton();
 }
@@ -506,6 +507,7 @@ function initTheme() {
 function updateThemeButton() {
   const dark = document.documentElement.dataset.theme === "dark";
   $("#theme-toggle").textContent = dark ? "☀ Light" : "☾ Dark";
+  $("#theme-toggle").setAttribute("aria-pressed", dark ? "true" : "false");
 }
 
 async function init() {
