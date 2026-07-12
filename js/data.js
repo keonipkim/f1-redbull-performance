@@ -60,6 +60,27 @@ const DATA = {
     return s;
   },
 
+  /**
+   * Head-to-head between two drivers in one season, over the rounds where
+   * both cars entered. Qualifying compares grid slots (a pit-lane start,
+   * grid 0, loses to any grid slot); the race score only counts rounds where
+   * both cars were classified.
+   */
+  headToHead(year, aId, bId) {
+    const rounds = this.season(year)
+      .races.filter((r) => r.results[aId] && r.results[bId])
+      .map((r) => ({ race: r, a: r.results[aId], b: r.results[bId] }));
+    const h2h = { rounds, quali: { a: 0, b: 0 }, race: { a: 0, b: 0 } };
+    for (const { a, b } of rounds) {
+      const ga = a.grid === 0 ? Infinity : a.grid;
+      const gb = b.grid === 0 ? Infinity : b.grid;
+      if (ga !== gb) h2h.quali[ga < gb ? "a" : "b"] += 1;
+      if (a.finish !== null && b.finish !== null && a.finish !== b.finish)
+        h2h.race[a.finish < b.finish ? "a" : "b"] += 1;
+    }
+    return h2h;
+  },
+
   /** Season aggregates summed over every Red Bull car entered. */
   teamStats(year) {
     const season = this.season(year);
@@ -99,7 +120,13 @@ const DATA = {
     return rows;
   },
 
-  /** Drivers' standings: rivals merged with derived Red Bull driver totals. */
+  /**
+   * Drivers' standings: rivals merged with derived Red Bull driver totals.
+   * The rival lists include every scorer down to the last full-season Red Bull
+   * driver, so the merged rank IS the championship position. Partial-season
+   * stints (drivers with a `rounds` window) score points here that don't match
+   * their whole-season total, so they get no position.
+   */
   driverStandings(year) {
     const season = this.season(year);
     const rbRows = season.drivers.map((d) => ({
@@ -107,10 +134,12 @@ const DATA = {
       team: "Red Bull",
       points: this.driverStats(year, d.id).points,
       isRedBull: true,
+      partial: !!d.rounds,
     }));
     const rows = [...rbRows, ...season.rivalDriverStandings.map((r) => ({ ...r }))];
     rows.sort((a, b) => b.points - a.points);
-    rows.forEach((r, i) => (r.position = i + 1));
+    let pos = 0;
+    rows.forEach((r) => (r.position = r.partial ? null : ++pos));
     return rows;
   },
 

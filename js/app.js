@@ -1,8 +1,8 @@
 /* ==========================================================================
- * app.js — state, wiring, and the three views.
+ * app.js — state, wiring, and the four views.
  *
- * State is tiny: selected season (scopes every view), selected driver and
- * circuit (explorer dimensions), active tab, theme. Any state change
+ * State is tiny: selected season (scopes every view), selected driver,
+ * comparison pair and circuit (explorer dimensions), active tab, theme. Any state change
  * re-renders from the derived data in data.js; charts are rebuilt so they
  * pick up the current theme's CSS variables.
  * ========================================================================== */
@@ -12,8 +12,10 @@
 const { DateTime } = luxon;
 
 const state = {
-  season: null,   // e.g. "2025"
+  season: null,   // e.g. "2026"
   driver: null,   // driver id within the season
+  compareA: null, // head-to-head driver ids within the season
+  compareB: null,
   circuit: null,  // circuit id
   view: "overview",
 };
@@ -32,6 +34,11 @@ function fmtPoints(n) {
 
 function positionLabel(result) {
   return result.finish === null ? "DNF" : `P${result.finish}`;
+}
+
+/** Grid 0 means the car started from the pit lane, not a grid slot. */
+function gridLabel(result) {
+  return result.grid === 0 ? "PL" : `P${result.grid}`;
 }
 
 /** One stat tile; delta is optional {value, goodWhenUp, vs}. */
@@ -75,14 +82,17 @@ function renderOverview() {
   const prev = prevYear ? DATA.teamStats(prevYear) : null;
 
   // Season subtitle: car, calendar span (Luxon), championship position.
+  const inProgress = season.scheduledRounds && season.races.length < season.scheduledRounds;
   const first = season.races[0], last = season.races[season.races.length - 1];
   const span = `${DateTime.fromISO(first.date).toFormat("d LLL")} – ${DateTime.fromISO(last.date).toFormat("d LLL yyyy")}`;
+  const rounds = inProgress ? `${season.races.length} of ${season.scheduledRounds} rounds so far` : `${season.races.length} rounds`;
   $("#overview-sub").textContent =
-    `${season.car} · ${season.races.length} rounds (${span}) · P${season.teamPosition} in the Constructors' Championship`;
+    `${season.car} · ${rounds} (${span}) · P${season.teamPosition} in the Constructors' Championship`;
 
   // ---- Stat tiles (team totals, delta vs previous season) ----
+  // No deltas mid-season: a part season vs a full one isn't a fair comparison.
   const d = (key, goodWhenUp = true) =>
-    prev ? { value: stats[key] - prev[key], goodWhenUp, vs: prevYear } : null;
+    prev && !inProgress ? { value: stats[key] - prev[key], goodWhenUp, vs: prevYear } : null;
   renderTiles("#overview-tiles", [
     tile("Constructors' position", `P${season.teamPosition}`),
     tile("Points", fmtPoints(stats.points), d("points")),
@@ -235,8 +245,9 @@ function renderDrivers() {
   const gpName = (i) => rows[i].race.gp;
 
   // ---- Positions gained/lost per race (diverging bars: blue up, red down) ----
+  // No bar for a DNF, or for a pit-lane start (no grid slot to measure against).
   const pair = divergingPair();
-  const deltas = rows.map(({ result }) => (result.finish === null ? null : result.grid - result.finish));
+  const deltas = rows.map(({ result }) => (result.finish === null || result.grid === 0 ? null : result.grid - result.finish));
   const colors = deltas.map((v) => (v === null || v === 0 ? pair.mid : v > 0 ? pair.pos : pair.neg));
   const deltaChart = CHARTS.bar("chart-driver-delta", labels, [{ label: "Places", data: deltas, colors }], {
     yTitle: "Places gained vs grid",
@@ -244,7 +255,10 @@ function renderDrivers() {
   });
   deltaChart.options.plugins.tooltip.callbacks.label = (item) => {
     const v = item.raw;
-    if (v === null) return " DNF";
+    if (v === null) {
+      const r = rows[item.dataIndex].result;
+      return r.finish === null ? " DNF" : " Pit-lane start — no grid slot";
+    }
     if (v === 0) return " Finished where they started";
     return ` ${v > 0 ? "Gained" : "Lost"} ${Math.abs(v)} place${Math.abs(v) === 1 ? "" : "s"}`;
   };
@@ -273,11 +287,108 @@ function renderDrivers() {
       else if (result.note) notes.push(result.note);
       return [
         race.round, race.gp, fmtDate(race.date),
-        `P${result.grid}`, positionLabel(result), fmtPoints(result.points),
+        gridLabel(result), positionLabel(result), fmtPoints(result.points),
         notes.join(" · ") || "—",
       ];
     }),
     { rowClass: (i) => (rows[i].result.finish === 1 ? "highlight" : "") }
+  );
+}
+
+/* ==========================================================================
+ * Head-to-head comparison view
+ * ========================================================================== */
+
+/** Sensible defaults: A is Verstappen, B the season's current (latest) teammate. */
+function normalizeComparePair(season) {
+  const ids = season.drivers.map((drv) => drv.id);
+  if (!ids.includes(state.compareA)) state.compareA = ids.includes("verstappen") ? "verstappen" : ids[0];
+  if (!ids.includes(state.compareB) || state.compareB === state.compareA) {
+    state.compareB = [...ids].reverse().find((id) => id !== state.compareA) || ids[0];
+  }
+}
+
+function renderCompare() {
+  const year = state.season;
+  const season = DATA.season(year);
+
+  // (Re)populate both selectors for this season and keep the pair valid.
+  normalizeComparePair(season);
+  for (const [sel, key] of [[$("#compare-a"), "compareA"], [$("#compare-b"), "compareB"]]) {
+    sel.textContent = "";
+    for (const drv of season.drivers) {
+      const opt = document.createElement("option");
+      opt.value = drv.id;
+      opt.textContent = `${drv.name} (#${drv.number})`;
+      sel.appendChild(opt);
+    }
+    sel.value = state[key];
+  }
+
+  const a = { id: state.compareA, name: DATA.driverName(year, state.compareA), stats: DATA.driverStats(year, state.compareA) };
+  const b = { id: state.compareB, name: DATA.driverName(year, state.compareB), stats: DATA.driverStats(year, state.compareB) };
+  const h2h = DATA.headToHead(year, a.id, b.id);
+
+  $("#compare-sub").textContent =
+    `${a.name} vs ${b.name} — ${h2h.rounds.length} shared round${h2h.rounds.length === 1 ? "" : "s"} in ${year} (values read A – B)`;
+
+  // ---- Tiles: side-by-side season aggregates plus the two head-to-head scores ----
+  const vs = (key, fmt = (v) => v) => `${fmt(a.stats[key])} – ${fmt(b.stats[key])}`;
+  renderTiles("#compare-tiles", [
+    tile("Points", vs("points", fmtPoints)),
+    tile("Wins", vs("wins")),
+    tile("Podiums", vs("podiums")),
+    tile("Poles", vs("poles")),
+    tile("Qualifying head-to-head", `${h2h.quali.a} – ${h2h.quali.b}`),
+    tile("Race head-to-head", `${h2h.race.a} – ${h2h.race.b}`),
+    tile("DNFs", vs("dnfs")),
+  ]);
+
+  const labels = DATA.roundLabels(year);
+  const gpName = (i) => season.races[i].gp;
+
+  // ---- Cumulative points, both drivers (null before a mid-season debut) ----
+  const cumChart = CHARTS.line("chart-compare-cumulative", labels, [a, b].map((drv) => ({
+    label: drv.name,
+    data: DATA.cumulativePoints(year, drv.id),
+    color: driverColor(drv.id),
+  })), { yTitle: "Points" });
+  cumChart.options.plugins.tooltip.callbacks = { title: (items) => gpName(items[0].dataIndex) };
+  cumChart.update();
+
+  // ---- Finishing positions per round (reversed axis: P1 on top) ----
+  const posChart = CHARTS.line("chart-compare-pos", labels, [a, b].map((drv) => ({
+    label: drv.name,
+    data: season.races.map((race) => {
+      const r = race.results[drv.id];
+      return r && r.finish !== null ? r.finish : null;
+    }),
+    color: driverColor(drv.id),
+    showPoints: true,
+  })), { reverse: true, yMax: 20, endLabelFmt: (v) => `P${v}` });
+  posChart.options.plugins.tooltip.callbacks = {
+    title: (items) => gpName(items[0].dataIndex),
+    label: (item) => {
+      if (item.raw !== null) return ` ${item.dataset.label}: P${item.raw}`;
+      const r = season.races[item.dataIndex].results[[a, b][item.datasetIndex].id];
+      return ` ${item.dataset.label}: ${r ? "DNF" : "did not race"}`;
+    },
+  };
+  posChart.update();
+
+  // ---- Round-by-round table over the shared rounds ----
+  renderTable(
+    $("#table-compare"),
+    [
+      { label: "Rnd", num: true }, { label: "Grand Prix" },
+      { label: `${a.name} — grid`, num: true }, { label: "Finish", num: true }, { label: "Points", num: true },
+      { label: `${b.name} — grid`, num: true }, { label: "Finish", num: true }, { label: "Points", num: true },
+    ],
+    h2h.rounds.map(({ race, a: ra, b: rb }) => [
+      race.round, race.gp,
+      gridLabel(ra), positionLabel(ra), fmtPoints(ra.points),
+      gridLabel(rb), positionLabel(rb), fmtPoints(rb.points),
+    ])
   );
 }
 
@@ -354,7 +465,7 @@ function renderCircuits() {
     ],
     history.map((h) => [
       h.year, h.race.gp, h.race.winner,
-      h.ver ? `P${h.ver.grid}` : "—", h.ver ? positionLabel(h.ver) : "—", fmtPoints(h.teamPoints),
+      h.ver ? gridLabel(h.ver) : "—", h.ver ? positionLabel(h.ver) : "—", fmtPoints(h.teamPoints),
     ]),
     { rowClass: (i) => (history[i].ver && history[i].ver.finish === 1 ? "highlight" : "") }
   );
@@ -367,6 +478,7 @@ function renderCircuits() {
 function renderAll() {
   renderOverview();
   renderDrivers();
+  renderCompare();
   renderCircuits();
 }
 
@@ -450,6 +562,17 @@ async function init() {
     state.driver = e.target.value;
     renderDrivers();
   });
+  // Comparison selectors: picking the other side's driver swaps the pair.
+  $("#compare-a").addEventListener("change", (e) => {
+    if (e.target.value === state.compareB) state.compareB = state.compareA;
+    state.compareA = e.target.value;
+    renderCompare();
+  });
+  $("#compare-b").addEventListener("change", (e) => {
+    if (e.target.value === state.compareA) state.compareA = state.compareB;
+    state.compareB = e.target.value;
+    renderCompare();
+  });
   $("#circuit-select").addEventListener("change", (e) => {
     state.circuit = e.target.value;
     renderCircuits();
@@ -466,9 +589,9 @@ async function init() {
 
   $("#footer-note").textContent = DATA.raw.meta.note;
 
-  // Deep links: ?view=drivers|circuits opens straight to that tab.
+  // Deep links: ?view=drivers|compare|circuits opens straight to that tab.
   const viewParam = new URLSearchParams(location.search).get("view");
-  switchView(["overview", "drivers", "circuits"].includes(viewParam) ? viewParam : "overview");
+  switchView(["overview", "drivers", "compare", "circuits"].includes(viewParam) ? viewParam : "overview");
   renderAll();
 }
 

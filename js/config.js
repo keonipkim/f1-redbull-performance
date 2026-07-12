@@ -41,6 +41,7 @@ const DRIVER_SLOT = {
   verstappen: "--series-1",
   perez: "--series-3",
   tsunoda: "--series-3",
+  hadjar: "--series-3",
   lawson: "--series-5",
 };
 
