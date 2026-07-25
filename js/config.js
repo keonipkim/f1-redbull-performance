@@ -25,6 +25,10 @@ const TEAM_SLOT = {
   "Ferrari": "--series-6",
   "Alpine": "--series-7",
   "McLaren": "--series-8",
+  "Racing Bulls": "--series-5",
+  "Haas": "--series-other",
+  "Audi": "--series-other",
+  "Cadillac": "--series-other",
 };
 
 function teamColor(teamName) {

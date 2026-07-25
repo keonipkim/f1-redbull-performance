@@ -207,6 +207,112 @@ function renderOverview() {
 }
 
 /* ==========================================================================
+ * Driver media (portrait + car)
+ * ========================================================================== */
+
+/** Build a figure with image or monogram placeholder. */
+function mediaFigure(src, alt, monogram, figureClass) {
+  const fig = document.createElement("figure");
+  fig.className = figureClass;
+  if (src) {
+    const img = document.createElement("img");
+    img.src = src;
+    img.alt = alt;
+    img.loading = "lazy";
+    img.decoding = "async";
+    img.addEventListener("error", () => {
+      img.remove();
+      const ph = document.createElement("div");
+      ph.className = "media-placeholder";
+      ph.textContent = monogram;
+      ph.setAttribute("aria-hidden", "true");
+      fig.prepend(ph);
+    });
+    fig.appendChild(img);
+  } else {
+    const ph = document.createElement("div");
+    ph.className = "media-placeholder";
+    ph.textContent = monogram;
+    ph.setAttribute("aria-hidden", "true");
+    fig.appendChild(ph);
+  }
+  return fig;
+}
+
+function renderDriverMedia(driver, season) {
+  const box = $("#driver-media");
+  box.textContent = "";
+  if (!driver) {
+    box.hidden = true;
+    return;
+  }
+  box.hidden = false;
+
+  const photoFig = mediaFigure(
+    driver.photo || null,
+    `${driver.name} portrait`,
+    (driver.code || driver.name.slice(0, 3)).toUpperCase(),
+    "driver-photo"
+  );
+  const cap = document.createElement("figcaption");
+  const nameEl = document.createElement("strong");
+  nameEl.textContent = driver.name;
+  const metaEl = document.createElement("span");
+  metaEl.textContent = `#${driver.number} · ${driver.code}`;
+  cap.append(nameEl, metaEl);
+  photoFig.appendChild(cap);
+
+  const carFig = mediaFigure(
+    season.carImage || null,
+    `${season.car} race car`,
+    season.car || "CAR",
+    "driver-car"
+  );
+  const carCap = document.createElement("figcaption");
+  const carStrong = document.createElement("strong");
+  carStrong.textContent = season.car;
+  const carMeta = document.createElement("span");
+  carMeta.textContent = `${state.season} constructor car`;
+  carCap.append(carStrong, carMeta);
+  carFig.appendChild(carCap);
+
+  box.append(photoFig, carFig);
+}
+
+function renderCompareMedia(year, aId, bId) {
+  const box = $("#compare-media");
+  const season = DATA.season(year);
+  const a = season.drivers.find((d) => d.id === aId);
+  const b = season.drivers.find((d) => d.id === bId);
+  box.textContent = "";
+  if (!a || !b) {
+    box.hidden = true;
+    return;
+  }
+  box.hidden = false;
+
+  for (const drv of [a, b]) {
+    const card = document.createElement("div");
+    card.className = "compare-media-card";
+    const fig = mediaFigure(
+      drv.photo || null,
+      `${drv.name} portrait`,
+      (drv.code || drv.name.slice(0, 3)).toUpperCase(),
+      "compare-photo"
+    );
+    const label = document.createElement("div");
+    label.className = "compare-media-label";
+    const name = document.createElement("strong");
+    name.textContent = drv.name;
+    const meta = document.createElement("span");
+    meta.textContent = `#${drv.number}`;
+    label.append(name, meta);
+    card.append(fig, label);
+    box.appendChild(card);
+  }
+}
+
+/* ==========================================================================
  * Driver & race explorer
  * ========================================================================== */
 
@@ -225,6 +331,9 @@ function renderDrivers() {
   }
   if (!season.drivers.some((drv) => drv.id === state.driver)) state.driver = season.drivers[0].id;
   sel.value = state.driver;
+
+  const driverMeta = season.drivers.find((drv) => drv.id === state.driver);
+  renderDriverMedia(driverMeta, season);
 
   const rows = DATA.driverRaces(year, state.driver);
   const stats = DATA.driverStats(year, state.driver);
@@ -328,6 +437,8 @@ function renderCompare() {
   const a = { id: state.compareA, name: DATA.driverName(year, state.compareA), stats: DATA.driverStats(year, state.compareA) };
   const b = { id: state.compareB, name: DATA.driverName(year, state.compareB), stats: DATA.driverStats(year, state.compareB) };
   const h2h = DATA.headToHead(year, a.id, b.id);
+
+  renderCompareMedia(year, a.id, b.id);
 
   $("#compare-sub").textContent =
     `${a.name} vs ${b.name} — ${h2h.rounds.length} shared round${h2h.rounds.length === 1 ? "" : "s"} in ${year} (values read A – B)`;
@@ -589,7 +700,9 @@ async function init() {
     renderAll();
   });
 
-  $("#footer-note").textContent = DATA.raw.meta.note;
+  const footerParts = [DATA.raw.meta.note];
+  if (DATA.raw.meta.mediaNote) footerParts.push(DATA.raw.meta.mediaNote);
+  $("#footer-note").textContent = footerParts.join(" ");
 
   // Deep links: ?view=drivers|compare|circuits opens straight to that tab.
   const viewParam = new URLSearchParams(location.search).get("view");
