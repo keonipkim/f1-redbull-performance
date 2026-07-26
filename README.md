@@ -22,7 +22,7 @@ https://keonikim.com/f1-redbull-performance/
 - Luxon for date handling
 
 ### Data Source
-Per-race records compiled from official Formula 1 results via the open [Jolpica/Ergast](https://api.jolpi.ca/ergast/) motorsport results database, cross-checked against [Formula1.com results](https://www.formula1.com/en/results). Season and championship statistics are computed client-side from the raw race records. 2026 data runs through the Belgian Grand Prix (round 10 of 22).
+Per-race records compiled from official Formula 1 results via the open [Jolpica/Ergast](https://api.jolpi.ca/ergast/) motorsport results database, cross-checked against [Formula1.com results](https://www.formula1.com/en/results). Season and championship statistics are computed client-side from the raw race records. 2026 data runs through the Hungarian Grand Prix (round 11 of 22).
 
 Supporting references: [OpenF1](https://openf1.org/) (telemetry), [FIA documents](https://www.fia.com/documents), [Jolpica-F1 repo](https://github.com/jolpica/jolpica-f1). The original Ergast API is deprecated past 2024.
 
@@ -50,7 +50,9 @@ git push origin main
 ```
 
 ### Media
-Driver portraits and car shots live under `assets/drivers/` and `assets/cars/`. Paths are optional fields on each season driver (`photo`) and season (`carImage`). Images are Wikimedia Commons sources used for illustration; replace with your own assets as needed. Season chassis photos currently share a stand-in RB20-era shot where a year-specific image is not available.
+Driver portraits and car shots live under `assets/drivers/` and `assets/cars/`. Paths are optional fields on each season driver (`photo`) and season (`carImage`). Images are Wikimedia Commons sources used for illustration; replace with your own assets as needed.
+
+Chassis photos are year-specific: RB16B (2021), RB18 (2022), RB19 (2023), RB20 (2024), RB21 (2025), RB22 (2026).
 
 ### Driver Coverage
 - **2021–2024:** Max Verstappen and Sergio Pérez (the full-season pairing in all four years)

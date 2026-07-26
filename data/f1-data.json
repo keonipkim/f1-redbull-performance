@@ -1,8 +1,8 @@
 {
   "meta": {
     "title": "Red Bull Racing Performance Dashboard",
-    "generated": "2026-07-25",
-    "note": "Race records compiled from official Formula 1 results (Jolpica/Ergast motorsport database, cross-checked against Formula1.com). Per-race 'points' totals fold in sprint points and, through 2024, fastest-lap bonus points. 2026 season data runs through the Belgian Grand Prix (round 10 of 22).",
+    "generated": "2026-07-26",
+    "note": "Race records compiled from official Formula 1 results (Jolpica/Ergast motorsport database, cross-checked against Formula1.com). Per-race 'points' totals fold in sprint points and, through 2024, fastest-lap bonus points. 2026 season data runs through the Hungarian Grand Prix (round 11 of 22).",
     "pointsSystem": {
       "1": 25,
       "2": 18,
@@ -66,7 +66,7 @@
     },
     "portimao": {
       "name": "Algarve International Circuit",
-      "location": "Portim\u00e3o",
+      "location": "Portimão",
       "country": "Portugal",
       "lengthKm": 4.653,
       "laps": 66,
@@ -177,7 +177,7 @@
       "type": "Permanent"
     },
     "mexico": {
-      "name": "Aut\u00f3dromo Hermanos Rodr\u00edguez",
+      "name": "Autódromo Hermanos Rodríguez",
       "location": "Mexico City",
       "country": "Mexico",
       "lengthKm": 4.304,
@@ -185,8 +185,8 @@
       "type": "Permanent"
     },
     "interlagos": {
-      "name": "Aut\u00f3dromo Jos\u00e9 Carlos Pace",
-      "location": "S\u00e3o Paulo",
+      "name": "Autódromo José Carlos Pace",
+      "location": "São Paulo",
       "country": "Brazil",
       "lengthKm": 4.309,
       "laps": 71,
@@ -271,7 +271,7 @@
         },
         {
           "id": "perez",
-          "name": "Sergio P\u00e9rez",
+          "name": "Sergio Pérez",
           "code": "PER",
           "number": 11,
           "photo": "assets/drivers/perez.jpg"
@@ -365,7 +365,7 @@
               "grid": 0,
               "finish": 5,
               "points": 10,
-              "note": "Stalled on the formation lap \u2014 started from the pit lane"
+              "note": "Stalled on the formation lap — started from the pit lane"
             }
           }
         },
@@ -451,14 +451,14 @@
           "gp": "Azerbaijan Grand Prix",
           "circuit": "baku",
           "date": "2021-06-06",
-          "winner": "Sergio P\u00e9rez",
+          "winner": "Sergio Pérez",
           "results": {
             "verstappen": {
               "grid": 3,
               "finish": null,
               "points": 0,
               "fl": true,
-              "status": "DNF \u2014 tyre failure"
+              "status": "DNF — tyre failure"
             },
             "perez": {
               "grid": 6,
@@ -538,7 +538,7 @@
               "finish": null,
               "points": 3,
               "sprint": 3,
-              "status": "DNF \u2014 collision"
+              "status": "DNF — collision"
             },
             "perez": {
               "grid": 0,
@@ -565,7 +565,7 @@
               "grid": 4,
               "finish": null,
               "points": 0,
-              "status": "DNF \u2014 collision"
+              "status": "DNF — collision"
             }
           }
         },
@@ -622,7 +622,7 @@
               "finish": null,
               "points": 2,
               "sprint": 2,
-              "status": "DNF \u2014 collision"
+              "status": "DNF — collision"
             },
             "perez": {
               "grid": 8,
@@ -709,7 +709,7 @@
         },
         {
           "round": 19,
-          "gp": "S\u00e3o Paulo Grand Prix",
+          "gp": "São Paulo Grand Prix",
           "circuit": "interlagos",
           "date": "2021-11-14",
           "winner": "Lewis Hamilton",
@@ -764,7 +764,7 @@
               "grid": 5,
               "finish": null,
               "points": 0,
-              "status": "DNF \u2014 collision"
+              "status": "DNF — collision"
             }
           }
         },
@@ -785,7 +785,7 @@
               "grid": 4,
               "finish": null,
               "points": 0,
-              "status": "DNF \u2014 engine"
+              "status": "DNF — engine"
             }
           }
         }
@@ -805,7 +805,7 @@
         },
         {
           "id": "perez",
-          "name": "Sergio P\u00e9rez",
+          "name": "Sergio Pérez",
           "code": "PER",
           "number": 11,
           "photo": "assets/drivers/perez.jpg"
@@ -894,13 +894,13 @@
               "grid": 2,
               "finish": null,
               "points": 0,
-              "status": "DNF \u2014 fuel pressure"
+              "status": "DNF — fuel pressure"
             },
             "perez": {
               "grid": 4,
               "finish": null,
               "points": 0,
-              "status": "DNF \u2014 fuel pressure"
+              "status": "DNF — fuel pressure"
             }
           }
         },
@@ -934,7 +934,7 @@
               "grid": 2,
               "finish": null,
               "points": 0,
-              "status": "DNF \u2014 fuel leak"
+              "status": "DNF — fuel leak"
             },
             "perez": {
               "grid": 3,
@@ -1010,7 +1010,7 @@
           "gp": "Monaco Grand Prix",
           "circuit": "monaco",
           "date": "2022-05-29",
-          "winner": "Sergio P\u00e9rez",
+          "winner": "Sergio Pérez",
           "results": {
             "verstappen": {
               "grid": 4,
@@ -1060,7 +1060,7 @@
               "grid": 13,
               "finish": null,
               "points": 0,
-              "status": "DNF \u2014 gearbox"
+              "status": "DNF — gearbox"
             }
           }
         },
@@ -1103,7 +1103,7 @@
               "finish": null,
               "points": 4,
               "sprint": 4,
-              "status": "DNF \u2014 collision damage"
+              "status": "DNF — collision damage"
             }
           }
         },
@@ -1211,7 +1211,7 @@
           "gp": "Singapore Grand Prix",
           "circuit": "singapore",
           "date": "2022-10-02",
-          "winner": "Sergio P\u00e9rez",
+          "winner": "Sergio Pérez",
           "results": {
             "verstappen": {
               "grid": 8,
@@ -1285,7 +1285,7 @@
         },
         {
           "round": 21,
-          "gp": "S\u00e3o Paulo Grand Prix",
+          "gp": "São Paulo Grand Prix",
           "circuit": "interlagos",
           "date": "2022-11-13",
           "winner": "George Russell",
@@ -1339,7 +1339,7 @@
         },
         {
           "id": "perez",
-          "name": "Sergio P\u00e9rez",
+          "name": "Sergio Pérez",
           "code": "PER",
           "number": 11,
           "photo": "assets/drivers/perez.jpg"
@@ -1441,7 +1441,7 @@
           "gp": "Saudi Arabian Grand Prix",
           "circuit": "jeddah",
           "date": "2023-03-19",
-          "winner": "Sergio P\u00e9rez",
+          "winner": "Sergio Pérez",
           "results": {
             "verstappen": {
               "grid": 15,
@@ -1482,7 +1482,7 @@
           "gp": "Azerbaijan Grand Prix",
           "circuit": "baku",
           "date": "2023-04-30",
-          "winner": "Sergio P\u00e9rez",
+          "winner": "Sergio Pérez",
           "results": {
             "verstappen": {
               "grid": 2,
@@ -1691,7 +1691,7 @@
               "grid": 2,
               "finish": 1,
               "points": 25,
-              "note": "10th consecutive win \u2014 F1 record"
+              "note": "10th consecutive win — F1 record"
             },
             "perez": {
               "grid": 5,
@@ -1736,7 +1736,7 @@
               "grid": 5,
               "finish": null,
               "points": 0,
-              "status": "DNF \u2014 collision damage"
+              "status": "DNF — collision damage"
             }
           }
         },
@@ -1799,13 +1799,13 @@
               "grid": 5,
               "finish": null,
               "points": 0,
-              "status": "DNF \u2014 first-lap collision"
+              "status": "DNF — first-lap collision"
             }
           }
         },
         {
           "round": 20,
-          "gp": "S\u00e3o Paulo Grand Prix",
+          "gp": "São Paulo Grand Prix",
           "circuit": "interlagos",
           "date": "2023-11-05",
           "winner": "Max Verstappen",
@@ -1855,7 +1855,7 @@
               "finish": 1,
               "points": 26,
               "fl": true,
-              "note": "19th win of the season \u2014 F1 record"
+              "note": "19th win of the season — F1 record"
             },
             "perez": {
               "grid": 9,
@@ -1880,7 +1880,7 @@
         },
         {
           "id": "perez",
-          "name": "Sergio P\u00e9rez",
+          "name": "Sergio Pérez",
           "code": "PER",
           "number": 11,
           "photo": "assets/drivers/perez.jpg"
@@ -2013,7 +2013,7 @@
               "grid": 1,
               "finish": null,
               "points": 0,
-              "status": "DNF \u2014 brake failure"
+              "status": "DNF — brake failure"
             },
             "perez": {
               "grid": 6,
@@ -2119,7 +2119,7 @@
               "grid": 16,
               "finish": null,
               "points": 0,
-              "status": "DNF \u2014 first-lap collision"
+              "status": "DNF — first-lap collision"
             }
           }
         },
@@ -2139,7 +2139,7 @@
               "grid": 16,
               "finish": null,
               "points": 0,
-              "status": "DNF \u2014 crash damage"
+              "status": "DNF — crash damage"
             }
           }
         },
@@ -2297,7 +2297,7 @@
               "grid": 4,
               "finish": null,
               "points": 0,
-              "status": "DNF \u2014 late-race collision"
+              "status": "DNF — late-race collision"
             }
           }
         },
@@ -2362,7 +2362,7 @@
         },
         {
           "round": 21,
-          "gp": "S\u00e3o Paulo Grand Prix",
+          "gp": "São Paulo Grand Prix",
           "circuit": "interlagos",
           "date": "2024-11-03",
           "winner": "Max Verstappen",
@@ -2421,7 +2421,7 @@
               "grid": 9,
               "finish": null,
               "points": 0,
-              "status": "DNF \u2014 retired"
+              "status": "DNF — retired"
             }
           }
         },
@@ -2441,7 +2441,7 @@
               "grid": 10,
               "finish": null,
               "points": 0,
-              "status": "DNF \u2014 first-lap collision"
+              "status": "DNF — first-lap collision"
             }
           }
         }
@@ -2578,7 +2578,7 @@
               "grid": 18,
               "finish": null,
               "points": 0,
-              "status": "DNF \u2014 crashed in wet conditions"
+              "status": "DNF — crashed in wet conditions"
             }
           }
         },
@@ -2657,7 +2657,7 @@
               "grid": 8,
               "finish": null,
               "points": 0,
-              "status": "DNF \u2014 first-lap collision"
+              "status": "DNF — first-lap collision"
             }
           }
         },
@@ -2731,7 +2731,7 @@
               "grid": 3,
               "finish": 10,
               "points": 1,
-              "note": "10s penalty \u2014 collision"
+              "note": "10s penalty — collision"
             },
             "tsunoda": {
               "grid": 19,
@@ -2770,7 +2770,7 @@
               "grid": 7,
               "finish": null,
               "points": 0,
-              "status": "DNF \u2014 first-lap collision"
+              "status": "DNF — first-lap collision"
             },
             "tsunoda": {
               "grid": 18,
@@ -2957,7 +2957,7 @@
         },
         {
           "round": 21,
-          "gp": "S\u00e3o Paulo Grand Prix",
+          "gp": "São Paulo Grand Prix",
           "circuit": "interlagos",
           "date": "2025-11-09",
           "winner": "Lando Norris",
@@ -3064,27 +3064,27 @@
         {
           "name": "Andrea Kimi Antonelli",
           "team": "Mercedes",
-          "points": 204
+          "points": 219
         },
         {
           "name": "Lewis Hamilton",
           "team": "Ferrari",
-          "points": 159
+          "points": 169
         },
         {
           "name": "George Russell",
           "team": "Mercedes",
-          "points": 154
+          "points": 160
         },
         {
           "name": "Charles Leclerc",
           "team": "Ferrari",
-          "points": 126
+          "points": 138
         },
         {
           "name": "Lando Norris",
           "team": "McLaren",
-          "points": 103
+          "points": 128
         },
         {
           "name": "Oscar Piastri",
@@ -3095,27 +3095,27 @@
       "rivalConstructorStandings": [
         {
           "team": "Mercedes",
-          "points": 358
+          "points": 379
         },
         {
           "team": "Ferrari",
-          "points": 285
+          "points": 307
         },
         {
           "team": "McLaren",
-          "points": 195
+          "points": 220
+        },
+        {
+          "team": "Racing Bulls",
+          "points": 66
         },
         {
           "team": "Alpine",
           "points": 61
         },
         {
-          "team": "Racing Bulls",
-          "points": 61
-        },
-        {
           "team": "Others",
-          "points": 43
+          "points": 45
         }
       ],
       "profiles": {
@@ -3149,13 +3149,13 @@
               "finish": 6,
               "points": 8,
               "fl": true,
-              "note": "Crashed in Q1 without a time \u2014 started last"
+              "note": "Crashed in Q1 without a time — started last"
             },
             "hadjar": {
               "grid": 3,
               "finish": null,
               "points": 0,
-              "status": "DNF \u2014 power unit",
+              "status": "DNF — power unit",
               "note": "Qualified 3rd on Red Bull debut"
             }
           }
@@ -3171,7 +3171,7 @@
               "grid": 8,
               "finish": null,
               "points": 0,
-              "status": "DNF \u2014 ERS coolant failure"
+              "status": "DNF — ERS coolant failure"
             },
             "hadjar": {
               "grid": 9,
@@ -3216,8 +3216,8 @@
               "grid": 0,
               "finish": null,
               "points": 0,
-              "status": "DNF \u2014 accident",
-              "note": "Qualifying times deleted (floor infringement) \u2014 pit-lane start"
+              "status": "DNF — accident",
+              "note": "Qualifying times deleted (floor infringement) — pit-lane start"
             }
           }
         },
@@ -3252,7 +3252,7 @@
               "grid": 2,
               "finish": null,
               "points": 0,
-              "status": "DNF \u2014 engine failure at the start"
+              "status": "DNF — engine failure at the start"
             },
             "hadjar": {
               "grid": 5,
@@ -3311,7 +3311,7 @@
               "finish": null,
               "points": 3,
               "sprint": 3,
-              "status": "DNF \u2014 spun off (rear-wing fault)"
+              "status": "DNF — spun off (rear-wing fault)"
             },
             "hadjar": {
               "grid": 5,
@@ -3334,6 +3334,25 @@
             },
             "hadjar": {
               "grid": 21,
+              "finish": 6,
+              "points": 8
+            }
+          }
+        },
+        {
+          "round": 11,
+          "gp": "Hungarian Grand Prix",
+          "circuit": "hungaroring",
+          "date": "2026-07-26",
+          "winner": "Lando Norris",
+          "results": {
+            "verstappen": {
+              "grid": 4,
+              "finish": 2,
+              "points": 18
+            },
+            "hadjar": {
+              "grid": 8,
               "finish": 6,
               "points": 8
             }
