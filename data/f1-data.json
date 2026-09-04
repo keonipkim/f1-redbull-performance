@@ -1,8 +1,8 @@
 {
   "meta": {
     "title": "Red Bull Racing Performance Dashboard",
-    "generated": "2026-07-26",
-    "note": "Race records compiled from official Formula 1 results (Jolpica/Ergast motorsport database, cross-checked against Formula1.com). Per-race 'points' totals fold in sprint points and, through 2024, fastest-lap bonus points. 2026 season data runs through the Hungarian Grand Prix (round 11 of 22).",
+    "generated": "2026-09-04",
+    "note": "Race records compiled from official Formula 1 results (Jolpica/Ergast motorsport database, cross-checked against Formula1.com). Per-race 'points' totals fold in sprint points and, through 2024, fastest-lap bonus points. 2026 season data runs through the Dutch Grand Prix (round 12 of 23). Monaco 2026 uses the FIA International Court of Appeal classification of 4 September 2026.",
     "pointsSystem": {
       "1": 25,
       "2": 18,
@@ -3043,7 +3043,7 @@
     "2026": {
       "car": "RB22",
       "teamPosition": 4,
-      "scheduledRounds": 22,
+      "scheduledRounds": 23,
       "drivers": [
         {
           "id": "verstappen",
@@ -3058,64 +3058,75 @@
           "code": "HAD",
           "number": 6,
           "photo": "assets/drivers/hadjar.jpg"
+        },
+        {
+          "id": "lawson",
+          "name": "Liam Lawson",
+          "code": "LAW",
+          "number": 30,
+          "rounds": [
+            12,
+            12
+          ],
+          "photo": "assets/drivers/lawson.png"
         }
       ],
       "rivalDriverStandings": [
         {
           "name": "Andrea Kimi Antonelli",
           "team": "Mercedes",
-          "points": 219
-        },
-        {
-          "name": "Lewis Hamilton",
-          "team": "Ferrari",
-          "points": 169
+          "points": 242
         },
         {
           "name": "George Russell",
           "team": "Mercedes",
-          "points": 160
+          "points": 183
         },
         {
-          "name": "Charles Leclerc",
+          "name": "Lewis Hamilton",
           "team": "Ferrari",
-          "points": 138
+          "points": 183
         },
         {
           "name": "Lando Norris",
           "team": "McLaren",
-          "points": 128
+          "points": 159
+        },
+        {
+          "name": "Charles Leclerc",
+          "team": "Ferrari",
+          "points": 155
         },
         {
           "name": "Oscar Piastri",
           "team": "McLaren",
-          "points": 92
+          "points": 106
         }
       ],
       "rivalConstructorStandings": [
         {
           "team": "Mercedes",
-          "points": 379
+          "points": 425
         },
         {
           "team": "Ferrari",
-          "points": 307
+          "points": 338
         },
         {
           "team": "McLaren",
-          "points": 220
+          "points": 265
         },
         {
           "team": "Racing Bulls",
-          "points": 66
+          "points": 70
         },
         {
           "team": "Alpine",
-          "points": 61
+          "points": 54
         },
         {
           "team": "Others",
-          "points": 45
+          "points": 51
         }
       ],
       "profiles": {
@@ -3134,6 +3145,14 @@
           "consistency": 7.6,
           "tyreManagement": 7.7,
           "wetWeather": 7.4
+        },
+        "lawson": {
+          "qualifying": 6.8,
+          "racePace": 6.9,
+          "racecraft": 7.2,
+          "consistency": 6.5,
+          "tyreManagement": 7,
+          "wetWeather": 6.9
         }
       },
       "races": [
@@ -3256,8 +3275,9 @@
             },
             "hadjar": {
               "grid": 5,
-              "finish": 4,
-              "points": 12
+              "finish": 3,
+              "points": 15,
+              "note": "FIA ICA reinstated P3 on 4 Sep 2026 after Gasly's pit-lane penalties were reapplied"
             }
           }
         },
@@ -3355,6 +3375,28 @@
               "grid": 8,
               "finish": 6,
               "points": 8
+            }
+          }
+        },
+        {
+          "round": 12,
+          "gp": "Dutch Grand Prix",
+          "circuit": "zandvoort",
+          "date": "2026-08-23",
+          "winner": "Lando Norris",
+          "results": {
+            "verstappen": {
+              "grid": 7,
+              "finish": null,
+              "points": 3,
+              "sprint": 3,
+              "status": "DNF — opening-lap accident"
+            },
+            "lawson": {
+              "grid": 8,
+              "finish": 7,
+              "points": 6,
+              "note": "Substitute for Hadjar (wrist injury); 10s penalty for yellow flags, position unchanged"
             }
           }
         }
