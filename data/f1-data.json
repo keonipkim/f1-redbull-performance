@@ -1,8 +1,8 @@
 {
   "meta": {
     "title": "Red Bull Racing Performance Dashboard",
-    "generated": "2026-09-04",
-    "note": "Race records compiled from official Formula 1 results (Jolpica/Ergast motorsport database, cross-checked against Formula1.com). Per-race 'points' totals fold in sprint points and, through 2024, fastest-lap bonus points. 2026 season data runs through the Dutch Grand Prix (round 12 of 23). Monaco 2026 uses the FIA International Court of Appeal classification of 4 September 2026.",
+    "generated": "2026-09-06",
+    "note": "Race records compiled from official Formula 1 results (Jolpica/Ergast motorsport database, cross-checked against Formula1.com). Per-race 'points' totals fold in sprint points and, through 2024, fastest-lap bonus points. 2026 season data runs through the Italian Grand Prix (round 13 of 23). Monaco 2026 uses the FIA International Court of Appeal classification of 4 September 2026.",
     "pointsSystem": {
       "1": 25,
       "2": 18,
@@ -3066,7 +3066,7 @@
           "number": 30,
           "rounds": [
             12,
-            12
+            13
           ],
           "photo": "assets/drivers/lawson.png"
         }
@@ -3075,22 +3075,22 @@
         {
           "name": "Andrea Kimi Antonelli",
           "team": "Mercedes",
-          "points": 242
+          "points": 267
         },
         {
           "name": "George Russell",
           "team": "Mercedes",
-          "points": 183
+          "points": 201
         },
         {
           "name": "Lewis Hamilton",
           "team": "Ferrari",
-          "points": 183
+          "points": 191
         },
         {
           "name": "Lando Norris",
           "team": "McLaren",
-          "points": 159
+          "points": 171
         },
         {
           "name": "Charles Leclerc",
@@ -3100,29 +3100,29 @@
         {
           "name": "Oscar Piastri",
           "team": "McLaren",
-          "points": 106
+          "points": 116
         }
       ],
       "rivalConstructorStandings": [
         {
           "team": "Mercedes",
-          "points": 425
+          "points": 468
         },
         {
           "team": "Ferrari",
-          "points": 338
+          "points": 346
         },
         {
           "team": "McLaren",
-          "points": 265
+          "points": 287
         },
         {
           "team": "Racing Bulls",
-          "points": 70
+          "points": 75
         },
         {
           "team": "Alpine",
-          "points": 54
+          "points": 62
         },
         {
           "team": "Others",
@@ -3397,6 +3397,26 @@
               "finish": 7,
               "points": 6,
               "note": "Substitute for Hadjar (wrist injury); 10s penalty for yellow flags, position unchanged"
+            }
+          }
+        },
+        {
+          "round": 13,
+          "gp": "Italian Grand Prix",
+          "circuit": "monza",
+          "date": "2026-09-06",
+          "winner": "Andrea Kimi Antonelli",
+          "results": {
+            "verstappen": {
+              "grid": 5,
+              "finish": 3,
+              "points": 15
+            },
+            "lawson": {
+              "grid": 0,
+              "finish": 14,
+              "points": 0,
+              "note": "Substitute for Hadjar (wrist injury); pit-lane start (PU elements + parc fermé)"
             }
           }
         }
