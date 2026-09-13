@@ -1,8 +1,8 @@
 {
   "meta": {
     "title": "Red Bull Racing Performance Dashboard",
-    "generated": "2026-09-06",
-    "note": "Race records compiled from official Formula 1 results (Jolpica/Ergast motorsport database, cross-checked against Formula1.com). Per-race 'points' totals fold in sprint points and, through 2024, fastest-lap bonus points. 2026 season data runs through the Italian Grand Prix (round 13 of 23). Monaco 2026 uses the FIA International Court of Appeal classification of 4 September 2026.",
+    "generated": "2026-09-13",
+    "note": "Race records compiled from official Formula 1 results (Jolpica/Ergast motorsport database, cross-checked against Formula1.com). Per-race 'points' totals fold in sprint points and, through 2024, fastest-lap bonus points. 2026 season data runs through the Spanish Grand Prix (round 14 of 23). Monaco 2026 uses the FIA International Court of Appeal classification of 4 September 2026.",
     "pointsSystem": {
       "1": 25,
       "2": 18,
@@ -255,6 +255,14 @@
       "lengthKm": 5.451,
       "laps": 56,
       "type": "Permanent"
+    },
+    "madring": {
+      "name": "Madring",
+      "location": "Madrid",
+      "country": "Spain",
+      "lengthKm": 5.416,
+      "laps": 57,
+      "type": "Street"
     }
   },
   "seasons": {
@@ -3066,7 +3074,8 @@
           "number": 30,
           "rounds": [
             12,
-            13
+            13,
+            14
           ],
           "photo": "assets/drivers/lawson.png"
         }
@@ -3075,12 +3084,12 @@
         {
           "name": "Andrea Kimi Antonelli",
           "team": "Mercedes",
-          "points": 267
+          "points": 292
         },
         {
           "name": "George Russell",
           "team": "Mercedes",
-          "points": 201
+          "points": 211
         },
         {
           "name": "Lewis Hamilton",
@@ -3090,43 +3099,43 @@
         {
           "name": "Lando Norris",
           "team": "McLaren",
-          "points": 171
+          "points": 186
         },
         {
           "name": "Charles Leclerc",
           "team": "Ferrari",
-          "points": 155
+          "points": 167
         },
         {
           "name": "Oscar Piastri",
           "team": "McLaren",
-          "points": 116
+          "points": 120
         }
       ],
       "rivalConstructorStandings": [
         {
           "team": "Mercedes",
-          "points": 468
+          "points": 503
         },
         {
           "team": "Ferrari",
-          "points": 346
+          "points": 358
         },
         {
           "team": "McLaren",
-          "points": 287
+          "points": 306
         },
         {
           "team": "Racing Bulls",
-          "points": 75
+          "points": 77
         },
         {
           "team": "Alpine",
-          "points": 62
+          "points": 68
         },
         {
           "team": "Others",
-          "points": 51
+          "points": 52
         }
       ],
       "profiles": {
@@ -3274,7 +3283,7 @@
               "status": "DNF — engine failure at the start"
             },
             "hadjar": {
-              "grid": 5,
+              "grid": 0,
               "finish": 3,
               "points": 15,
               "note": "FIA ICA reinstated P3 on 4 Sep 2026 after Gasly's pit-lane penalties were reapplied"
@@ -3417,6 +3426,26 @@
               "finish": 14,
               "points": 0,
               "note": "Substitute for Hadjar (wrist injury); pit-lane start (PU elements + parc fermé)"
+            }
+          }
+        },
+        {
+          "round": 14,
+          "gp": "Spanish Grand Prix",
+          "circuit": "madring",
+          "date": "2026-09-13",
+          "winner": "Andrea Kimi Antonelli",
+          "results": {
+            "verstappen": {
+              "grid": 3,
+              "finish": 2,
+              "points": 18
+            },
+            "lawson": {
+              "grid": 8,
+              "finish": 6,
+              "points": 8,
+              "note": "Substitute for Hadjar (wrist injury)"
             }
           }
         }
