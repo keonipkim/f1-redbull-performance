@@ -73,6 +73,7 @@ CIRCUIT_MAP = {
     "losail": "losail",
     "yas_marina": "yasmarina",
     "madring": "madring",  # 2026 Madrid — add circuit meta if missing
+    "sepang": "sepang",  # 2026 Bahrain GP in Malaysia
     "portimao": "portimao",
     "paul_ricard": "paulricard",
     "sochi": "sochi",

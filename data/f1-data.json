@@ -263,6 +263,14 @@
       "lengthKm": 5.416,
       "laps": 57,
       "type": "Street"
+    },
+    "sepang": {
+      "name": "Sepang International Circuit",
+      "location": "Sepang",
+      "country": "Malaysia",
+      "lengthKm": 5.543,
+      "laps": 56,
+      "type": "Permanent"
     }
   },
   "seasons": {
