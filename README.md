@@ -22,7 +22,7 @@ https://keonikim.com/f1-redbull-performance/
 - Luxon for date handling
 
 ### Data Source
-Per-race records compiled from official Formula 1 results via the open [Jolpica/Ergast](https://api.jolpi.ca/ergast/) motorsport results database, cross-checked against [Formula1.com results](https://www.formula1.com/en/results). Season and championship statistics are computed client-side from the raw race records. 2026 data runs through the Spanish Grand Prix at the Madring (round 14 of 23). Monaco 2026 uses the FIA International Court of Appeal classification of 4 September 2026.
+Per-race records compiled from official Formula 1 results via the open [Jolpica/Ergast](https://api.jolpi.ca/ergast/) motorsport results database, cross-checked against [Formula1.com results](https://www.formula1.com/en/results). Season and championship statistics are computed client-side from the raw race records. 2026 data runs through the Azerbaijan Grand Prix at Baku (round 15 of 23). Monaco 2026 uses the FIA International Court of Appeal classification of 4 September 2026.
 
 Supporting references: [OpenF1](https://openf1.org/) (telemetry), [FIA documents](https://www.fia.com/documents), [Jolpica-F1 repo](https://github.com/jolpica/jolpica-f1). The original Ergast API is deprecated past 2024.
 
@@ -57,4 +57,4 @@ Chassis photos are year-specific: RB16B (2021), RB18 (2022), RB19 (2023), RB20 (
 ### Driver Coverage
 - **2021–2024:** Max Verstappen and Sergio Pérez (the full-season pairing in all four years)
 - **2025:** Verstappen, Liam Lawson (rounds 1–2), and Yuki Tsunoda (round 3 onward)
-- **2026:** Verstappen and Isack Hadjar; Liam Lawson substituted at the Dutch, Italian, and Spanish Grands Prix (rounds 12–14) after Hadjar's wrist injury
+- **2026:** Verstappen and Isack Hadjar; Liam Lawson substituted at the Dutch, Italian, and Spanish Grands Prix (rounds 12–14) after Hadjar's wrist injury. Hadjar returned at the Azerbaijan Grand Prix (round 15)

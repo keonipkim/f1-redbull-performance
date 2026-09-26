@@ -1,8 +1,8 @@
 {
   "meta": {
     "title": "Red Bull Racing Performance Dashboard",
-    "generated": "2026-09-13",
-    "note": "Race records compiled from official Formula 1 results (Jolpica/Ergast motorsport database, cross-checked against Formula1.com). Per-race 'points' totals fold in sprint points and, through 2024, fastest-lap bonus points. 2026 season data runs through the Spanish Grand Prix (round 14 of 23). Monaco 2026 uses the FIA International Court of Appeal classification of 4 September 2026.",
+    "generated": "2026-09-26",
+    "note": "Race records compiled from official Formula 1 results (Jolpica/Ergast motorsport database, cross-checked against Formula1.com). Per-race 'points' totals fold in sprint points and, through 2024, fastest-lap bonus points. 2026 season data runs through the Azerbaijan Grand Prix (round 15 of 23). Monaco 2026 uses the FIA International Court of Appeal classification of 4 September 2026.",
     "pointsSystem": {
       "1": 25,
       "2": 18,
@@ -3092,17 +3092,17 @@
         {
           "name": "Andrea Kimi Antonelli",
           "team": "Mercedes",
-          "points": 292
+          "points": 302
         },
         {
           "name": "George Russell",
           "team": "Mercedes",
-          "points": 211
+          "points": 236
         },
         {
           "name": "Lewis Hamilton",
           "team": "Ferrari",
-          "points": 191
+          "points": 199
         },
         {
           "name": "Lando Norris",
@@ -3112,7 +3112,7 @@
         {
           "name": "Charles Leclerc",
           "team": "Ferrari",
-          "points": 167
+          "points": 179
         },
         {
           "name": "Oscar Piastri",
@@ -3123,11 +3123,11 @@
       "rivalConstructorStandings": [
         {
           "team": "Mercedes",
-          "points": 503
+          "points": 538
         },
         {
           "team": "Ferrari",
-          "points": 358
+          "points": 378
         },
         {
           "team": "McLaren",
@@ -3135,7 +3135,7 @@
         },
         {
           "team": "Racing Bulls",
-          "points": 77
+          "points": 83
         },
         {
           "team": "Alpine",
@@ -3143,7 +3143,7 @@
         },
         {
           "team": "Others",
-          "points": 52
+          "points": 59
         }
       ],
       "profiles": {
@@ -3454,6 +3454,26 @@
               "finish": 6,
               "points": 8,
               "note": "Substitute for Hadjar (wrist injury)"
+            }
+          }
+        },
+        {
+          "round": 15,
+          "gp": "Azerbaijan Grand Prix",
+          "circuit": "baku",
+          "date": "2026-09-26",
+          "winner": "George Russell",
+          "results": {
+            "verstappen": {
+              "grid": 8,
+              "finish": 2,
+              "points": 18
+            },
+            "hadjar": {
+              "grid": 4,
+              "finish": 3,
+              "points": 15,
+              "note": "Returned from wrist injury"
             }
           }
         }

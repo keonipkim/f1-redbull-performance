@@ -23,6 +23,7 @@ from __future__ import annotations
 import argparse
 import json
 import sys
+import time
 import urllib.error
 import urllib.request
 from datetime import date
@@ -150,13 +151,21 @@ def log(msg: str = "") -> None:
 
 def get_json(url: str) -> dict[str, Any]:
     req = urllib.request.Request(url, headers={"User-Agent": USER_AGENT, "Accept": "application/json"})
-    try:
-        with urllib.request.urlopen(req, timeout=45) as resp:
-            return json.load(resp)
-    except urllib.error.HTTPError as e:
-        raise SystemExit(f"HTTP {e.code} fetching {url}") from e
-    except urllib.error.URLError as e:
-        raise SystemExit(f"Network error fetching {url}: {e.reason}") from e
+    delay = 2.0
+    for attempt in range(5):
+        try:
+            with urllib.request.urlopen(req, timeout=45) as resp:
+                return json.load(resp)
+        except urllib.error.HTTPError as e:
+            if e.code == 429 and attempt < 4:
+                log(f"HTTP 429 fetching {url}; retrying in {delay:.0f}s…")
+                time.sleep(delay)
+                delay *= 2
+                continue
+            raise SystemExit(f"HTTP {e.code} fetching {url}") from e
+        except urllib.error.URLError as e:
+            raise SystemExit(f"Network error fetching {url}: {e.reason}") from e
+    raise SystemExit(f"Failed to fetch {url}")
 
 
 def num(v: Any) -> int | float:
@@ -204,6 +213,23 @@ def status_label(res: dict[str, Any]) -> str:
     return f"DNF — {status}"
 
 
+def qualifying_grid_index(season: str, rounds: list[int]) -> dict[int, dict[str, int]]:
+    """driverId → qualifying position, used when race results omit grid."""
+    out: dict[int, dict[str, int]] = {}
+    for rnd in rounds:
+        detail = get_json(f"{API_BASE}/{season}/{rnd}/qualifying.json?limit=30")
+        rows = detail["MRData"]["RaceTable"]["Races"]
+        if not rows:
+            continue
+        out[rnd] = {}
+        for res in rows[0].get("QualifyingResults", []):
+            did = map_driver(res["Driver"]["driverId"])
+            pos = res.get("position")
+            if did and pos not in (None, ""):
+                out[rnd][did] = int(pos)
+    return out
+
+
 def fetch_season_bundle(season: str) -> dict[str, Any]:
     """Pull all Jolpica endpoints needed for one season."""
     base = f"{API_BASE}/{season}"
@@ -220,6 +246,7 @@ def fetch_season_bundle(season: str) -> dict[str, Any]:
 
     # Winners per completed round (paginate if needed)
     winners: dict[int, str] = {}
+    missing_grid_rounds: list[int] = []
     for race in race_list:
         rnd = int(race["round"])
         detail = get_json(f"{base}/{rnd}/results.json?limit=30")
@@ -230,6 +257,8 @@ def fetch_season_bundle(season: str) -> dict[str, Any]:
             if res.get("position") == "1":
                 winners[rnd] = f"{res['Driver']['givenName']} {res['Driver']['familyName']}"
                 break
+        if any(res.get("grid") in (None, "") for res in race.get("Results", [])):
+            missing_grid_rounds.append(rnd)
 
     return {
         "races": race_list,
@@ -238,6 +267,7 @@ def fetch_season_bundle(season: str) -> dict[str, Any]:
         "drivers": drivers["MRData"]["StandingsTable"]["StandingsLists"][0],
         "schedule": schedule["MRData"]["RaceTable"]["Races"],
         "winners": winners,
+        "qualifying_grids": qualifying_grid_index(season, missing_grid_rounds),
     }
 
 
@@ -262,6 +292,7 @@ def build_races(
     old_by_round = {int(r["round"]): r for r in old_races}
     sprint_pts = sprint_points_index(bundle["sprint"])
     winners = bundle["winners"]
+    quali_grids = bundle.get("qualifying_grids") or {}
 
     new_races: list[dict] = []
     for race in bundle["races"]:
@@ -299,9 +330,21 @@ def build_races(
             sp = sprint_pts.get(rnd, {}).get(did, 0.0)
             total = race_pts + sp
             fl = res.get("FastestLap", {}).get("rank") == "1"
+            grid_raw = res.get("grid")
+            if grid_raw in (None, ""):
+                grid = quali_grids.get(rnd, {}).get(did)
+                if grid is None:
+                    warnings.append(f"R{rnd} {did}: race grid missing and no qualifying position found")
+                    grid = 0
+                else:
+                    warnings.append(
+                        f"R{rnd} {did}: race grid missing from Jolpica; used qualifying P{grid}"
+                    )
+            else:
+                grid = int(grid_raw)
 
             result: dict[str, Any] = {
-                "grid": int(res["grid"]),
+                "grid": grid,
                 "finish": finish,
                 "points": num(total),
             }
@@ -435,12 +478,18 @@ def sync_season(data: dict[str, Any], season: str, bundle: dict[str, Any]) -> di
 
     last = new_races[-1]
     data["meta"]["generated"] = date.today().isoformat()
-    data["meta"]["note"] = (
+    note = (
         "Race records compiled from official Formula 1 results (Jolpica/Ergast motorsport database, "
         "cross-checked against Formula1.com). Per-race 'points' totals fold in sprint points and, "
         "through 2024, fastest-lap bonus points. "
         f"{season} season data runs through the {last['gp']} (round {last['round']} of {scheduled})."
     )
+    # Keep hand-authored classification notes the generator does not own.
+    previous_note = data["meta"].get("note") or ""
+    monaco_note = "Monaco 2026 uses the FIA International Court of Appeal classification of 4 September 2026."
+    if monaco_note in previous_note:
+        note = f"{note} {monaco_note}"
+    data["meta"]["note"] = note
 
     summary = {
         "season": season,
