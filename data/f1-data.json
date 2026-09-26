@@ -3073,7 +3073,8 @@
           "name": "Isack Hadjar",
           "code": "HAD",
           "number": 6,
-          "photo": "assets/drivers/hadjar.jpg"
+          "photo": "assets/drivers/hadjar.jpg",
+          "carImage": "assets/cars/rb22-hadjar.jpg"
         },
         {
           "id": "lawson",
@@ -3085,7 +3086,10 @@
             13,
             14
           ],
-          "photo": "assets/drivers/lawson.png"
+          "photo": "assets/drivers/lawson.jpg",
+          "car": "VCARB 03",
+          "carImage": "assets/cars/vcarb03-lawson.jpg",
+          "carMeta": "2026 Racing Bulls car"
         }
       ],
       "rivalDriverStandings": [

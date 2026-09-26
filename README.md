@@ -50,9 +50,9 @@ git push origin main
 ```
 
 ### Media
-Driver portraits and car shots live under `assets/drivers/` and `assets/cars/`. Paths are optional fields on each season driver (`photo`) and season (`carImage`). Images are Wikimedia Commons sources used for illustration; replace with your own assets as needed.
+Driver portraits and car shots live under `assets/drivers/` and `assets/cars/`. Paths are optional fields on each season driver (`photo`, plus `carImage` / `car` when that driver should not share the season chassis shot) and season (`carImage`). Images are Wikimedia Commons sources used for illustration; replace with your own assets as needed.
 
-Chassis photos are year-specific: RB16B (2021), RB18 (2022), RB19 (2023), RB20 (2024), RB21 (2025), RB22 (2026).
+Chassis photos are year-specific: RB16B (2021), RB18 (2022), RB19 (2023), RB20 (2024), RB21 (2025), RB22 (2026). Hadjar's 2026 card uses his own RB22 (Liauzh, [CC BY 4.0](https://creativecommons.org/licenses/by/4.0)). Lawson's 2026 card uses a 2026 portrait (Yu Chu Chin, [CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0)) and his VCARB 03 (Liauzh, [CC BY 4.0](https://creativecommons.org/licenses/by/4.0)).
 
 ### Driver Coverage
 - **2021–2024:** Max Verstappen and Sergio Pérez (the full-season pairing in all four years)

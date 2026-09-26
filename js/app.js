@@ -262,17 +262,18 @@ function renderDriverMedia(driver, season) {
   cap.append(nameEl, metaEl);
   photoFig.appendChild(cap);
 
+  const carName = driver.car || season.car;
   const carFig = mediaFigure(
-    season.carImage || null,
-    `${season.car} race car`,
-    season.car || "CAR",
+    driver.carImage || season.carImage || null,
+    `${driver.name} ${carName || "race"} car`,
+    carName || "CAR",
     "driver-car"
   );
   const carCap = document.createElement("figcaption");
   const carStrong = document.createElement("strong");
-  carStrong.textContent = season.car;
+  carStrong.textContent = carName;
   const carMeta = document.createElement("span");
-  carMeta.textContent = `${state.season} constructor car`;
+  carMeta.textContent = driver.carMeta || `${state.season} constructor car`;
   carCap.append(carStrong, carMeta);
   carFig.appendChild(carCap);
 
