@@ -1,8 +1,8 @@
 {
   "meta": {
     "title": "Red Bull Racing Performance Dashboard",
-    "generated": "2026-09-26",
-    "note": "Race records compiled from official Formula 1 results (Jolpica/Ergast motorsport database, cross-checked against Formula1.com). Per-race 'points' totals fold in sprint points and, through 2024, fastest-lap bonus points. 2026 season data runs through the Azerbaijan Grand Prix (round 15 of 23). Monaco 2026 uses the FIA International Court of Appeal classification of 4 September 2026.",
+    "generated": "2026-10-04",
+    "note": "Race records compiled from official Formula 1 results (Jolpica/Ergast motorsport database, cross-checked against Formula1.com). Per-race 'points' totals fold in sprint points and, through 2024, fastest-lap bonus points. 2026 season data runs through the Bahrain Grand Prix in Malaysia (round 16 of 23). Monaco 2026 uses the FIA International Court of Appeal classification of 4 September 2026. Jolpica had not published the Sepang race classification at sync time; round 16 is taken from the Formula1.com result.",
     "pointsSystem": {
       "1": 25,
       "2": 18,
@@ -3096,7 +3096,7 @@
         {
           "name": "Andrea Kimi Antonelli",
           "team": "Mercedes",
-          "points": 302
+          "points": 320
         },
         {
           "name": "George Russell",
@@ -3106,40 +3106,40 @@
         {
           "name": "Lewis Hamilton",
           "team": "Ferrari",
-          "points": 199
-        },
-        {
-          "name": "Lando Norris",
-          "team": "McLaren",
-          "points": 186
+          "points": 214
         },
         {
           "name": "Charles Leclerc",
           "team": "Ferrari",
-          "points": 179
+          "points": 191
+        },
+        {
+          "name": "Lando Norris",
+          "team": "McLaren",
+          "points": 188
         },
         {
           "name": "Oscar Piastri",
           "team": "McLaren",
-          "points": 120
+          "points": 128
         }
       ],
       "rivalConstructorStandings": [
         {
           "team": "Mercedes",
-          "points": 538
+          "points": 556
         },
         {
           "team": "Ferrari",
-          "points": 378
+          "points": 405
         },
         {
           "team": "McLaren",
-          "points": 306
+          "points": 316
         },
         {
           "team": "Racing Bulls",
-          "points": 83
+          "points": 90
         },
         {
           "team": "Alpine",
@@ -3147,7 +3147,7 @@
         },
         {
           "team": "Others",
-          "points": 59
+          "points": 63
         }
       ],
       "profiles": {
@@ -3478,6 +3478,28 @@
               "finish": 3,
               "points": 15,
               "note": "Returned from wrist injury"
+            }
+          }
+        },
+        {
+          "round": 16,
+          "gp": "Bahrain Grand Prix in Malaysia",
+          "circuit": "sepang",
+          "date": "2026-10-04",
+          "winner": "Max Verstappen",
+          "results": {
+            "verstappen": {
+              "grid": 1,
+              "finish": 1,
+              "points": 25,
+              "fl": true,
+              "note": "First win of 2026. Race classified after 55 laps following a wet-weather start suspension"
+            },
+            "hadjar": {
+              "grid": 8,
+              "finish": 5,
+              "points": 10,
+              "note": "Qualified 3rd; 5-place grid penalty for an additional power unit element"
             }
           }
         }
