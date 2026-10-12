@@ -1,8 +1,8 @@
 {
   "meta": {
     "title": "Red Bull Racing Performance Dashboard",
-    "generated": "2026-10-04",
-    "note": "Race records compiled from official Formula 1 results (Jolpica/Ergast motorsport database, cross-checked against Formula1.com). Per-race 'points' totals fold in sprint points and, through 2024, fastest-lap bonus points. 2026 season data runs through the Bahrain Grand Prix in Malaysia (round 16 of 23). Monaco 2026 uses the FIA International Court of Appeal classification of 4 September 2026. Jolpica had not published the Sepang race classification at sync time; round 16 is taken from the Formula1.com result.",
+    "generated": "2026-10-12",
+    "note": "Race records compiled from official Formula 1 results (Jolpica/Ergast motorsport database, cross-checked against Formula1.com). Per-race 'points' totals fold in sprint points and, through 2024, fastest-lap bonus points. 2026 season data runs through the Singapore Grand Prix (round 17 of 23). Monaco 2026 uses the FIA International Court of Appeal classification of 4 September 2026.",
     "pointsSystem": {
       "1": 25,
       "2": 18,
@@ -3096,50 +3096,50 @@
         {
           "name": "Andrea Kimi Antonelli",
           "team": "Mercedes",
-          "points": 320
+          "points": 340
         },
         {
           "name": "George Russell",
           "team": "Mercedes",
-          "points": 236
+          "points": 238
         },
         {
           "name": "Lewis Hamilton",
           "team": "Ferrari",
-          "points": 214
+          "points": 229
         },
         {
           "name": "Charles Leclerc",
           "team": "Ferrari",
-          "points": 191
+          "points": 215
         },
         {
           "name": "Lando Norris",
           "team": "McLaren",
-          "points": 188
+          "points": 201
         },
         {
           "name": "Oscar Piastri",
           "team": "McLaren",
-          "points": 128
+          "points": 138
         }
       ],
       "rivalConstructorStandings": [
         {
           "team": "Mercedes",
-          "points": 556
+          "points": 578
         },
         {
           "team": "Ferrari",
-          "points": 405
+          "points": 444
         },
         {
           "team": "McLaren",
-          "points": 316
+          "points": 339
         },
         {
           "team": "Racing Bulls",
-          "points": 90
+          "points": 100
         },
         {
           "team": "Alpine",
@@ -3147,7 +3147,7 @@
         },
         {
           "team": "Others",
-          "points": 63
+          "points": 72
         }
       ],
       "profiles": {
@@ -3500,6 +3500,28 @@
               "finish": 5,
               "points": 10,
               "note": "Qualified 3rd; 5-place grid penalty for an additional power unit element"
+            }
+          }
+        },
+        {
+          "round": 17,
+          "gp": "Singapore Grand Prix",
+          "circuit": "singapore",
+          "date": "2026-10-11",
+          "winner": "Max Verstappen",
+          "results": {
+            "verstappen": {
+              "grid": 1,
+              "finish": 1,
+              "points": 33,
+              "sprint": 8,
+              "note": "Sprint and race win from pole"
+            },
+            "hadjar": {
+              "grid": 0,
+              "finish": 10,
+              "points": 1,
+              "note": "No qualifying time; pit-lane start (PU elements + parc ferm\u00e9). Sprint DNF (power unit)"
             }
           }
         }
