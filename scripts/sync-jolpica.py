@@ -230,6 +230,45 @@ def qualifying_grid_index(season: str, rounds: list[int]) -> dict[int, dict[str,
     return out
 
 
+def winner_name(res: dict[str, Any]) -> str:
+    return f"{res['Driver']['givenName']} {res['Driver']['familyName']}"
+
+
+def season_result_winners(season: str, wanted: set[int]) -> dict[int, str]:
+    """Winners from the season results feed.
+
+    Jolpica sometimes lists a round under constructor results before
+    `/{season}/{round}/results.json` is populated. The season feed is paged
+    by result row, not by race.
+    """
+    winners: dict[int, str] = {}
+    offset = 0
+    limit = 100
+    total: int | None = None
+    while wanted - set(winners) and (total is None or offset < total):
+        detail = get_json(f"{API_BASE}/{season}/results.json?limit={limit}&offset={offset}")
+        mr = detail["MRData"]
+        total = int(mr["total"])
+        races = mr["RaceTable"]["Races"]
+        if not races:
+            break
+        consumed = 0
+        for race in races:
+            results = race.get("Results") or []
+            consumed += len(results)
+            rnd = int(race["round"])
+            if rnd not in wanted or rnd in winners:
+                continue
+            for res in results:
+                if res.get("position") == "1":
+                    winners[rnd] = winner_name(res)
+                    break
+        if consumed == 0:
+            break
+        offset += consumed
+    return winners
+
+
 def fetch_season_bundle(season: str) -> dict[str, Any]:
     """Pull all Jolpica endpoints needed for one season."""
     base = f"{API_BASE}/{season}"
@@ -246,19 +285,27 @@ def fetch_season_bundle(season: str) -> dict[str, Any]:
 
     # Winners per completed round (paginate if needed)
     winners: dict[int, str] = {}
+    missing_winner_rounds: list[int] = []
     missing_grid_rounds: list[int] = []
     for race in race_list:
         rnd = int(race["round"])
         detail = get_json(f"{base}/{rnd}/results.json?limit=30")
         rows = detail["MRData"]["RaceTable"]["Races"]
         if not rows:
-            continue
-        for res in rows[0]["Results"]:
-            if res.get("position") == "1":
-                winners[rnd] = f"{res['Driver']['givenName']} {res['Driver']['familyName']}"
-                break
+            missing_winner_rounds.append(rnd)
+        else:
+            for res in rows[0]["Results"]:
+                if res.get("position") == "1":
+                    winners[rnd] = winner_name(res)
+                    break
+            if rnd not in winners:
+                missing_winner_rounds.append(rnd)
         if any(res.get("grid") in (None, "") for res in race.get("Results", [])):
             missing_grid_rounds.append(rnd)
+
+    if missing_winner_rounds:
+        log(f"Round results endpoint missing winners for {missing_winner_rounds}; using season results feed…")
+        winners.update(season_result_winners(season, set(missing_winner_rounds)))
 
     return {
         "races": race_list,
@@ -447,11 +494,19 @@ def sync_season(data: dict[str, Any], season: str, bundle: dict[str, Any]) -> di
     totals = driver_point_totals(new_races)
     team_total = sum(totals.values())
 
-    # Prefer derived team total (includes sprint) over standings if they match closely
-    if rb_points is not None and abs(team_total - float(rb_points)) > 0.1:
+    # Prefer derived team total (includes sprint) over standings if they match closely.
+    # A lower API total usually means the standings snapshot has not absorbed the
+    # latest race yet — don't replace the tables with that stale snapshot.
+    standings_stale = rb_points is not None and team_total > float(rb_points) + 0.1
+    standings_mismatch = rb_points is not None and abs(team_total - float(rb_points)) > 0.1
+    if standings_mismatch:
         warnings.append(
             f"Derived team points ({team_total}) ≠ API constructor standings ({rb_points}). "
             "Check sprint folding or mid-season seat changes."
+        )
+    if standings_stale:
+        warnings.append(
+            "API constructor standings are behind the race results; left championship tables unchanged."
         )
 
     rb_driver_ids = {d["id"] for d in season_obj["drivers"]}
@@ -470,10 +525,11 @@ def sync_season(data: dict[str, Any], season: str, bundle: dict[str, Any]) -> di
     scheduled = len(bundle["schedule"]) or season_obj.get("scheduledRounds") or 24
 
     season_obj["races"] = new_races
-    season_obj["rivalConstructorStandings"] = rivals
-    season_obj["rivalDriverStandings"] = rival_drivers
-    if rb_pos is not None:
-        season_obj["teamPosition"] = rb_pos
+    if not standings_stale:
+        season_obj["rivalConstructorStandings"] = rivals
+        season_obj["rivalDriverStandings"] = rival_drivers
+        if rb_pos is not None:
+            season_obj["teamPosition"] = rb_pos
     season_obj["scheduledRounds"] = scheduled
 
     last = new_races[-1]

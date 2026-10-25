@@ -1,8 +1,8 @@
 {
   "meta": {
     "title": "Red Bull Racing Performance Dashboard",
-    "generated": "2026-10-12",
-    "note": "Race records compiled from official Formula 1 results (Jolpica/Ergast motorsport database, cross-checked against Formula1.com). Per-race 'points' totals fold in sprint points and, through 2024, fastest-lap bonus points. 2026 season data runs through the Singapore Grand Prix (round 17 of 23). Monaco 2026 uses the FIA International Court of Appeal classification of 4 September 2026.",
+    "generated": "2026-10-25",
+    "note": "Race records compiled from official Formula 1 results (Jolpica/Ergast motorsport database, cross-checked against Formula1.com). Per-race 'points' totals fold in sprint points and, through 2024, fastest-lap bonus points. 2026 season data runs through the United States Grand Prix (round 18 of 23). Monaco 2026 uses the FIA International Court of Appeal classification of 4 September 2026.",
     "pointsSystem": {
       "1": 25,
       "2": 18,
@@ -3058,7 +3058,7 @@
     },
     "2026": {
       "car": "RB22",
-      "teamPosition": 4,
+      "teamPosition": 3,
       "scheduledRounds": 23,
       "drivers": [
         {
@@ -3096,54 +3096,54 @@
         {
           "name": "Andrea Kimi Antonelli",
           "team": "Mercedes",
-          "points": 340
+          "points": 365
         },
         {
           "name": "George Russell",
           "team": "Mercedes",
-          "points": 238
+          "points": 242
         },
         {
           "name": "Lewis Hamilton",
           "team": "Ferrari",
-          "points": 229
+          "points": 241
         },
         {
           "name": "Charles Leclerc",
           "team": "Ferrari",
-          "points": 215
+          "points": 233
         },
         {
           "name": "Lando Norris",
           "team": "McLaren",
-          "points": 201
+          "points": 211
         },
         {
           "name": "Oscar Piastri",
           "team": "McLaren",
-          "points": 138
+          "points": 144
         }
       ],
       "rivalConstructorStandings": [
         {
           "team": "Mercedes",
-          "points": 578
+          "points": 607
         },
         {
           "team": "Ferrari",
-          "points": 444
+          "points": 474
         },
         {
           "team": "McLaren",
-          "points": 339
+          "points": 355
         },
         {
           "team": "Racing Bulls",
-          "points": 100
+          "points": 102
         },
         {
           "team": "Alpine",
-          "points": 68
+          "points": 69
         },
         {
           "team": "Others",
@@ -3521,7 +3521,28 @@
               "grid": 0,
               "finish": 10,
               "points": 1,
-              "note": "No qualifying time; pit-lane start (PU elements + parc ferm\u00e9). Sprint DNF (power unit)"
+              "note": "No qualifying time; pit-lane start (PU elements + parc fermé). Sprint DNF (power unit)"
+            }
+          }
+        },
+        {
+          "round": 18,
+          "gp": "United States Grand Prix",
+          "circuit": "cota",
+          "date": "2026-10-25",
+          "winner": "Andrea Kimi Antonelli",
+          "results": {
+            "verstappen": {
+              "grid": 2,
+              "finish": 3,
+              "points": 15,
+              "note": "Qualified P2; poor start, finished P3"
+            },
+            "hadjar": {
+              "grid": 3,
+              "finish": 6,
+              "points": 8,
+              "note": "Qualified P3, finished P6"
             }
           }
         }
