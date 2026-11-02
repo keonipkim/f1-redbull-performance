@@ -1,8 +1,8 @@
 {
   "meta": {
     "title": "Red Bull Racing Performance Dashboard",
-    "generated": "2026-10-25",
-    "note": "Race records compiled from official Formula 1 results (Jolpica/Ergast motorsport database, cross-checked against Formula1.com). Per-race 'points' totals fold in sprint points and, through 2024, fastest-lap bonus points. 2026 season data runs through the United States Grand Prix (round 18 of 23). Monaco 2026 uses the FIA International Court of Appeal classification of 4 September 2026.",
+    "generated": "2026-11-02",
+    "note": "Race records compiled from official Formula 1 results (Jolpica/Ergast motorsport database, cross-checked against Formula1.com). Per-race 'points' totals fold in sprint points and, through 2024, fastest-lap bonus points. 2026 season data runs through the Mexico City Grand Prix (round 19 of 23). Monaco 2026 uses the FIA International Court of Appeal classification of 4 September 2026.",
     "pointsSystem": {
       "1": 25,
       "2": 18,
@@ -3096,27 +3096,27 @@
         {
           "name": "Andrea Kimi Antonelli",
           "team": "Mercedes",
-          "points": 365
-        },
-        {
-          "name": "George Russell",
-          "team": "Mercedes",
-          "points": 242
+          "points": 380
         },
         {
           "name": "Lewis Hamilton",
           "team": "Ferrari",
-          "points": 241
+          "points": 259
+        },
+        {
+          "name": "George Russell",
+          "team": "Mercedes",
+          "points": 250
         },
         {
           "name": "Charles Leclerc",
           "team": "Ferrari",
-          "points": 233
+          "points": 245
         },
         {
           "name": "Lando Norris",
           "team": "McLaren",
-          "points": 211
+          "points": 221
         },
         {
           "name": "Oscar Piastri",
@@ -3127,19 +3127,19 @@
       "rivalConstructorStandings": [
         {
           "team": "Mercedes",
-          "points": 607
+          "points": 630
         },
         {
           "team": "Ferrari",
-          "points": 474
+          "points": 504
         },
         {
           "team": "McLaren",
-          "points": 355
+          "points": 365
         },
         {
           "team": "Racing Bulls",
-          "points": 102
+          "points": 108
         },
         {
           "team": "Alpine",
@@ -3147,7 +3147,7 @@
         },
         {
           "team": "Others",
-          "points": 72
+          "points": 77
         }
       ],
       "profiles": {
@@ -3543,6 +3543,27 @@
               "finish": 6,
               "points": 8,
               "note": "Qualified P3, finished P6"
+            }
+          }
+        },
+        {
+          "round": 19,
+          "gp": "Mexico City Grand Prix",
+          "circuit": "mexico",
+          "date": "2026-11-01",
+          "winner": "Max Verstappen",
+          "results": {
+            "verstappen": {
+              "grid": 5,
+              "finish": 1,
+              "points": 25,
+              "note": "Qualified P4; 1-place grid penalty for a practice collision with Lawson. Won from P5"
+            },
+            "hadjar": {
+              "grid": 7,
+              "finish": 9,
+              "points": 2,
+              "note": "Qualified P7, finished P9"
             }
           }
         }
