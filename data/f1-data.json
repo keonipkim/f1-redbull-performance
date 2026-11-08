@@ -1,8 +1,8 @@
 {
   "meta": {
     "title": "Red Bull Racing Performance Dashboard",
-    "generated": "2026-11-02",
-    "note": "Race records compiled from official Formula 1 results (Jolpica/Ergast motorsport database, cross-checked against Formula1.com). Per-race 'points' totals fold in sprint points and, through 2024, fastest-lap bonus points. 2026 season data runs through the Mexico City Grand Prix (round 19 of 23). Monaco 2026 uses the FIA International Court of Appeal classification of 4 September 2026.",
+    "generated": "2026-11-08",
+    "note": "Race records compiled from official Formula 1 results (Jolpica/Ergast motorsport database, cross-checked against Formula1.com). Per-race 'points' totals fold in sprint points and, through 2024, fastest-lap bonus points. 2026 season data runs through the Brazilian Grand Prix (round 20 of 23). Monaco 2026 uses the FIA International Court of Appeal classification of 4 September 2026.",
     "pointsSystem": {
       "1": 25,
       "2": 18,
@@ -3096,50 +3096,50 @@
         {
           "name": "Andrea Kimi Antonelli",
           "team": "Mercedes",
-          "points": 380
-        },
-        {
-          "name": "Lewis Hamilton",
-          "team": "Ferrari",
-          "points": 259
+          "points": 390
         },
         {
           "name": "George Russell",
           "team": "Mercedes",
-          "points": 250
+          "points": 262
+        },
+        {
+          "name": "Lewis Hamilton",
+          "team": "Ferrari",
+          "points": 261
         },
         {
           "name": "Charles Leclerc",
           "team": "Ferrari",
-          "points": 245
+          "points": 251
         },
         {
           "name": "Lando Norris",
           "team": "McLaren",
-          "points": 221
+          "points": 246
         },
         {
           "name": "Oscar Piastri",
           "team": "McLaren",
-          "points": 144
+          "points": 152
         }
       ],
       "rivalConstructorStandings": [
         {
           "team": "Mercedes",
-          "points": 630
+          "points": 652
         },
         {
           "team": "Ferrari",
-          "points": 504
+          "points": 512
         },
         {
           "team": "McLaren",
-          "points": 365
+          "points": 398
         },
         {
           "team": "Racing Bulls",
-          "points": 108
+          "points": 112
         },
         {
           "team": "Alpine",
@@ -3147,7 +3147,7 @@
         },
         {
           "team": "Others",
-          "points": 77
+          "points": 78
         }
       ],
       "profiles": {
@@ -3557,13 +3557,34 @@
               "grid": 5,
               "finish": 1,
               "points": 25,
-              "note": "Qualified P4; 1-place grid penalty for a practice collision with Lawson. Won from P5"
+              "note": "Qualified P4; one-place grid penalty for an FP2 collision. Third win of 2026"
             },
             "hadjar": {
               "grid": 7,
               "finish": 9,
               "points": 2,
-              "note": "Qualified P7, finished P9"
+              "note": "Spun by Russell on the opening lap; recovered to P9"
+            }
+          }
+        },
+        {
+          "round": 20,
+          "gp": "Brazilian Grand Prix",
+          "circuit": "interlagos",
+          "date": "2026-11-08",
+          "winner": "Lando Norris",
+          "results": {
+            "verstappen": {
+              "grid": 21,
+              "finish": 2,
+              "points": 18,
+              "note": "Qualified P16; 30-place power-unit penalty, started 21st and finished P2"
+            },
+            "hadjar": {
+              "grid": 5,
+              "finish": 3,
+              "points": 15,
+              "note": "Qualified P7; started P5 after penalties ahead and finished P3"
             }
           }
         }
