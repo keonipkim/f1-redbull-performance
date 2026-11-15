@@ -154,3 +154,6 @@ vite.config.ts.timestamp-*
 .Trashes
 .VolumeIcon.icns
 Icon?
+
+# Python cache
+__pycache__/
