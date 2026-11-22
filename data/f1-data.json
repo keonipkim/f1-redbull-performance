@@ -1,8 +1,8 @@
 {
   "meta": {
     "title": "Red Bull Racing Performance Dashboard",
-    "generated": "2026-11-08",
-    "note": "Race records compiled from official Formula 1 results (Jolpica/Ergast motorsport database, cross-checked against Formula1.com). Per-race 'points' totals fold in sprint points and, through 2024, fastest-lap bonus points. 2026 season data runs through the Brazilian Grand Prix (round 20 of 23). Monaco 2026 uses the FIA International Court of Appeal classification of 4 September 2026.",
+    "generated": "2026-11-22",
+    "note": "Race records compiled from official Formula 1 results (Jolpica/Ergast motorsport database, cross-checked against Formula1.com). Per-race 'points' totals fold in sprint points and, through 2024, fastest-lap bonus points. 2026 season data runs through the Las Vegas Grand Prix (round 21 of 23). Monaco 2026 uses the FIA International Court of Appeal classification of 4 September 2026.",
     "pointsSystem": {
       "1": 25,
       "2": 18,
@@ -3096,58 +3096,58 @@
         {
           "name": "Andrea Kimi Antonelli",
           "team": "Mercedes",
-          "points": 390
-        },
-        {
-          "name": "George Russell",
-          "team": "Mercedes",
-          "points": 262
+          "points": 402
         },
         {
           "name": "Lewis Hamilton",
           "team": "Ferrari",
-          "points": 261
+          "points": 267
         },
         {
-          "name": "Charles Leclerc",
-          "team": "Ferrari",
-          "points": 251
+          "name": "George Russell",
+          "team": "Mercedes",
+          "points": 264
         },
         {
           "name": "Lando Norris",
           "team": "McLaren",
-          "points": 246
+          "points": 264
+        },
+        {
+          "name": "Charles Leclerc",
+          "team": "Ferrari",
+          "points": 250
         },
         {
           "name": "Oscar Piastri",
           "team": "McLaren",
-          "points": 152
+          "points": 167
         }
       ],
       "rivalConstructorStandings": [
         {
           "team": "Mercedes",
-          "points": 652
+          "points": 666
         },
         {
           "team": "Ferrari",
-          "points": 512
+          "points": 517
         },
         {
           "team": "McLaren",
-          "points": 398
+          "points": 431
         },
         {
           "team": "Racing Bulls",
-          "points": 112
+          "points": 114
         },
         {
           "team": "Alpine",
-          "points": 69
+          "points": 87
         },
         {
           "team": "Others",
-          "points": 78
+          "points": 82
         }
       ],
       "profiles": {
@@ -3585,6 +3585,27 @@
               "finish": 3,
               "points": 15,
               "note": "Qualified P7; started P5 after penalties ahead and finished P3"
+            }
+          }
+        },
+        {
+          "round": 21,
+          "gp": "Las Vegas Grand Prix",
+          "circuit": "lasvegas",
+          "date": "2026-11-22",
+          "winner": "Max Verstappen",
+          "results": {
+            "verstappen": {
+              "grid": 1,
+              "finish": 1,
+              "points": 25,
+              "note": "Fourth win of 2026, from pole"
+            },
+            "hadjar": {
+              "grid": 4,
+              "finish": 15,
+              "points": 0,
+              "note": "Qualified P4, finished P15"
             }
           }
         }
