@@ -1,8 +1,8 @@
 /* ==========================================================================
- * app.js — state, wiring, and the four views.
+ * app.js — state, wiring, and the five views.
  *
  * State is tiny: selected season (scopes every view), selected driver,
- * comparison pair and circuit (explorer dimensions), active tab, theme. Any state change
+ * comparison pair, circuit, and race (explorer dimensions), active tab, theme. Any state change
  * re-renders from the derived data in data.js; charts are rebuilt so they
  * pick up the current theme's CSS variables.
  * ========================================================================== */
@@ -17,6 +17,7 @@ const state = {
   compareA: null, // head-to-head driver ids within the season
   compareB: null,
   circuit: null,  // circuit id
+  race: null,     // round number within the season
   view: "overview",
 };
 
@@ -584,6 +585,247 @@ function renderCircuits() {
 }
 
 /* ==========================================================================
+ * Strategy view
+ * ========================================================================== */
+
+function compoundLabel(name) {
+  if (!name) return "—";
+  const lower = name.toLowerCase();
+  return lower.charAt(0).toUpperCase() + lower.slice(1);
+}
+
+function fmtSeconds(n) {
+  if (n === null || n === undefined || n === "") return "—";
+  return `${Number(n).toLocaleString(undefined, { minimumFractionDigits: 1, maximumFractionDigits: 1 })}s`;
+}
+
+function clearChart(id) {
+  const chart = CHARTS.registry[id];
+  if (!chart) return;
+  chart.destroy();
+  delete CHARTS.registry[id];
+}
+
+/** Keep the selected round when the season has it; otherwise the latest synced race. */
+function normalizeRace(season) {
+  const rounds = season.races.map((race) => race.round);
+  if (rounds.includes(state.race)) return;
+  const latest = [...season.races].reverse().find((race) => race.strategy) || season.races.at(-1);
+  state.race = latest ? latest.round : null;
+}
+
+function stintGap(laps) {
+  const gap = document.createElement("div");
+  gap.className = "stint-gap";
+  gap.style.flex = `${laps} 1 0`;
+  return gap;
+}
+
+function renderStintTimeline(year, race) {
+  const host = $("#stint-timeline");
+  host.textContent = "";
+  const entries = DATA.raceEntries(year, race);
+  const scheduled = (DATA.circuit(race.circuit) || {}).laps || 0;
+  let furthest = 0;
+  for (const { result } of entries) {
+    for (const stint of DATA.driverStints(result)) {
+      if (stint.lapEnd != null) furthest = Math.max(furthest, stint.lapEnd);
+    }
+  }
+  const scale = Math.max(scheduled, furthest, 1);
+  const compounds = [];
+
+  for (const { driver, result } of entries) {
+    const row = document.createElement("div");
+    row.className = "stint-row";
+    const label = document.createElement("div");
+    label.className = "stint-label";
+    label.textContent = driver.code || driver.name;
+
+    const track = document.createElement("div");
+    track.className = "stint-track";
+    const stints = DATA.driverStints(result).filter((stint) => DATA.stintLaps(stint));
+    if (!stints.length) {
+      const empty = document.createElement("div");
+      empty.className = "stint-empty";
+      empty.textContent = "No stint data";
+      track.appendChild(empty);
+    } else {
+      let cursor = 1;
+      for (const stint of stints) {
+        if (stint.lapStart > cursor) track.appendChild(stintGap(stint.lapStart - cursor));
+        const laps = DATA.stintLaps(stint);
+        const seg = document.createElement("div");
+        seg.className = "stint-seg";
+        seg.style.flex = `${laps} 1 0`;
+        seg.style.background = compoundColor(stint.compound);
+        seg.style.color = compoundInk(stint.compound);
+        const span = stint.lapStart === stint.lapEnd ? `lap ${stint.lapStart}` : `laps ${stint.lapStart}–${stint.lapEnd}`;
+        const age = stint.tyreAge != null ? `, tyre age ${stint.tyreAge}` : "";
+        seg.title = `${compoundLabel(stint.compound)} · ${span} · ${laps} lap${laps === 1 ? "" : "s"}${age}`;
+        if (laps >= 6) {
+          const text = document.createElement("span");
+          text.textContent = compoundLabel(stint.compound);
+          seg.appendChild(text);
+        }
+        track.appendChild(seg);
+        cursor = stint.lapEnd + 1;
+        if (stint.compound && !compounds.includes(stint.compound)) compounds.push(stint.compound);
+      }
+      if (cursor <= scale) track.appendChild(stintGap(scale - cursor + 1));
+    }
+
+    row.append(label, track);
+    host.appendChild(row);
+  }
+
+  if (!compounds.length) return;
+  const legend = document.createElement("div");
+  legend.className = "stint-legend";
+  for (const compound of compounds) {
+    const item = document.createElement("span");
+    item.className = "stint-key";
+    const dot = document.createElement("span");
+    dot.className = "swatch";
+    dot.style.background = compoundColor(compound);
+    item.append(dot, document.createTextNode(compoundLabel(compound)));
+    legend.appendChild(item);
+  }
+  host.appendChild(legend);
+}
+
+function renderPitChart(year, race) {
+  const card = $("#strategy-pits-card");
+  const stops = [];
+  for (const { driver, result } of DATA.raceEntries(year, race)) {
+    for (const pit of DATA.driverPits(result)) {
+      if (pit.stop == null) continue;
+      stops.push({ driver, pit });
+    }
+  }
+  if (!stops.length) {
+    card.hidden = true;
+    clearChart("chart-pits");
+    return;
+  }
+  card.hidden = false;
+  CHARTS.hbar(
+    "chart-pits",
+    stops.map(({ driver, pit }) => `${driver.code} · L${pit.lap}`),
+    stops.map(({ pit }) => pit.stop),
+    stops.map(({ driver }) => driverColor(driver.id)),
+    { xTitle: "Seconds" }
+  );
+}
+
+function renderStrategyTable(year, race) {
+  const rows = [];
+  for (const { driver, result } of DATA.raceEntries(year, race)) {
+    DATA.driverStints(result).forEach((stint, i) => {
+      let laps = "—";
+      if (stint.lapStart != null && stint.lapEnd != null) {
+        laps = stint.lapStart === stint.lapEnd ? String(stint.lapStart) : `${stint.lapStart}–${stint.lapEnd}`;
+      }
+      rows.push([
+        driver.code,
+        `Stint ${i + 1}`,
+        stint.compound ? { text: compoundLabel(stint.compound), swatch: compoundColor(stint.compound) } : "—",
+        laps,
+        stint.tyreAge != null ? stint.tyreAge : "—",
+        "—",
+        "—",
+      ]);
+    });
+    DATA.driverPits(result).forEach((pit, i) => {
+      rows.push([
+        driver.code,
+        `Pit ${i + 1}`,
+        "Pit lane",
+        pit.lap != null ? String(pit.lap) : "—",
+        "—",
+        fmtSeconds(pit.lane),
+        fmtSeconds(pit.stop),
+      ]);
+    });
+  }
+  renderTable(
+    $("#table-strategy"),
+    [
+      { label: "Driver" },
+      { label: "Record" },
+      { label: "Compound" },
+      { label: "Laps", num: true },
+      { label: "Tyre age", num: true },
+      { label: "Lane", num: true },
+      { label: "Stop", num: true },
+    ],
+    rows
+  );
+}
+
+function renderStrategy() {
+  const year = state.season;
+  const season = DATA.season(year);
+  const sel = $("#race-select");
+  sel.textContent = "";
+  for (const race of season.races) {
+    const opt = document.createElement("option");
+    opt.value = String(race.round);
+    opt.textContent = `R${race.round} · ${race.gp}`;
+    sel.appendChild(opt);
+  }
+  normalizeRace(season);
+  if (state.race != null) sel.value = String(state.race);
+
+  const race = season.races.find((item) => item.round === state.race);
+  const empty = $("#strategy-empty");
+  const body = $("#strategy-body");
+  if (!race || !race.strategy) {
+    body.hidden = true;
+    empty.hidden = false;
+    empty.textContent = Number(year) < 2023
+      ? "Strategy data starts in 2023. This season only has race results."
+      : "No strategy record for this Grand Prix.";
+    $("#strategy-sub").textContent = "Tyre stints, pit stops, and race-day weather from 2023 onward";
+    clearChart("chart-pits");
+    return;
+  }
+
+  empty.hidden = true;
+  body.hidden = false;
+  const weather = race.strategy.weather;
+  $("#strategy-sub").textContent = weather && weather.rain
+    ? `${race.gp} · ${fmtDate(race.date)} · wet race session`
+    : `${race.gp} · ${fmtDate(race.date)} · race session`;
+
+  const entries = DATA.raceEntries(year, race);
+  const tiles = entries.map(({ driver, result }) => tile(`${driver.code} stops`, DATA.stopCount(result)));
+  let longest = null;
+  const compounds = [];
+  for (const { driver, result } of entries) {
+    for (const stint of DATA.driverStints(result)) {
+      const laps = DATA.stintLaps(stint);
+      if (laps != null && (!longest || laps > longest.laps)) longest = { laps, code: driver.code };
+      if (stint.compound && !compounds.includes(stint.compound)) compounds.push(stint.compound);
+    }
+  }
+  tiles.push(tile(longest ? `Longest stint · ${longest.code}` : "Longest stint", longest ? String(longest.laps) : "—"));
+  tiles.push(tile("Compounds", compounds.length ? compounds.map(compoundLabel).join(" · ") : "—"));
+  tiles.push(tile("Conditions", !weather ? "—" : weather.rain ? "Rain" : "Dry"));
+  let track = "—";
+  if (weather && weather.trackStart != null) {
+    track = weather.trackEnd != null && weather.trackEnd !== weather.trackStart
+      ? `${weather.trackStart}–${weather.trackEnd}°`
+      : `${weather.trackStart}°`;
+  }
+  tiles.push(tile("Track", track));
+  renderTiles("#strategy-tiles", tiles);
+  renderStintTimeline(year, race);
+  renderPitChart(year, race);
+  renderStrategyTable(year, race);
+}
+
+/* ==========================================================================
  * Wiring
  * ========================================================================== */
 
@@ -592,6 +834,7 @@ function renderAll() {
   renderDrivers();
   renderCompare();
   renderCircuits();
+  renderStrategy();
 }
 
 function switchView(view) {
@@ -691,6 +934,10 @@ async function init() {
     state.circuit = e.target.value;
     renderCircuits();
   });
+  $("#race-select").addEventListener("change", (e) => {
+    state.race = Number(e.target.value);
+    renderStrategy();
+  });
 
   // Theme toggle: flip the attribute, then rebuild charts against the new vars.
   $("#theme-toggle").addEventListener("click", () => {
@@ -705,9 +952,9 @@ async function init() {
   if (DATA.raw.meta.mediaNote) footerParts.push(DATA.raw.meta.mediaNote);
   $("#footer-note").textContent = footerParts.join(" ");
 
-  // Deep links: ?view=drivers|compare|circuits opens straight to that tab.
+  // Deep links: ?view=drivers|compare|circuits|strategy opens straight to that tab.
   const viewParam = new URLSearchParams(location.search).get("view");
-  switchView(["overview", "drivers", "compare", "circuits"].includes(viewParam) ? viewParam : "overview");
+  switchView(["overview", "drivers", "compare", "circuits", "strategy"].includes(viewParam) ? viewParam : "overview");
   renderAll();
 }
 

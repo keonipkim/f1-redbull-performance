@@ -186,4 +186,34 @@ const DATA = {
     }
     return rows;
   },
+
+  /** Races that have an OpenF1 strategy block (2023 onward, once synced). */
+  racesWithStrategy(year) {
+    return this.season(year).races.filter((race) => race.strategy);
+  },
+
+  /** Drivers with a result in this race, in the season's driver order. */
+  raceEntries(year, race) {
+    return this.season(year).drivers
+      .filter((driver) => race.results[driver.id])
+      .map((driver) => ({ driver, result: race.results[driver.id] }));
+  },
+
+  driverStints(result) {
+    return (result.strategy && result.strategy.stints) || [];
+  },
+
+  driverPits(result) {
+    return (result.strategy && result.strategy.pits) || [];
+  },
+
+  stopCount(result) {
+    return this.driverPits(result).length;
+  },
+
+  /** Laps completed on a stint, or null when the lap window is missing. */
+  stintLaps(stint) {
+    if (stint.lapStart == null || stint.lapEnd == null || stint.lapEnd < stint.lapStart) return null;
+    return stint.lapEnd - stint.lapStart + 1;
+  },
 };

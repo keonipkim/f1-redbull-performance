@@ -66,6 +66,20 @@
   --delta-up: #0a7a2f;
   --delta-down: #c01020;
 
+  /* Tyre compounds — identity colours, same job as the series slots */
+  --tyre-soft: #c01020;
+  --tyre-soft-ink: #ffffff;
+  --tyre-medium: #e0a100;
+  --tyre-medium-ink: #1a1400;
+  --tyre-hard: #d5d0c8;
+  --tyre-hard-ink: #1a1400;
+  --tyre-intermediate: #0f7a3a;
+  --tyre-intermediate-ink: #ffffff;
+  --tyre-wet: #1a5fbf;
+  --tyre-wet-ink: #ffffff;
+  --tyre-unknown: #8a877f;
+  --tyre-unknown-ink: #ffffff;
+
   --tooltip-bg: rgba(12, 12, 14, 0.94);
   --tooltip-ink: #ffffff;
 
@@ -127,6 +141,19 @@
 
   --delta-up: #34d399;
   --delta-down: #ff6b6b;
+
+  --tyre-soft: #e10600;
+  --tyre-soft-ink: #ffffff;
+  --tyre-medium: #f0a500;
+  --tyre-medium-ink: #1a1400;
+  --tyre-hard: #f2efe9;
+  --tyre-hard-ink: #1a1400;
+  --tyre-intermediate: #2fbf6a;
+  --tyre-intermediate-ink: #06210f;
+  --tyre-wet: #3b8cff;
+  --tyre-wet-ink: #041428;
+  --tyre-unknown: #8a877f;
+  --tyre-unknown-ink: #ffffff;
 
   --tooltip-bg: rgba(245, 244, 242, 0.96);
   --tooltip-ink: #0c0c0e;
@@ -852,6 +879,85 @@ footer p { max-width: 72ch; }
   border: 1px solid var(--border);
   border-radius: 6px;
   padding: 2px 7px;
+}
+
+.view .notice {
+  margin: 8px 0 22px;
+}
+
+/* ---- Strategy: stint timeline -------------------------------------------- */
+
+.stint-row {
+  display: grid;
+  grid-template-columns: 52px 1fr;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 10px;
+}
+
+.stint-label {
+  font-family: "Barlow Condensed", "Inter", system-ui, sans-serif;
+  font-weight: 700;
+  font-size: 1.15rem;
+  letter-spacing: 0.04em;
+  color: var(--ink);
+}
+
+.stint-track {
+  display: flex;
+  height: 32px;
+  border-radius: 8px;
+  overflow: hidden;
+  background: var(--page-elevated);
+  border: 1px solid var(--border);
+}
+
+.stint-seg {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 0;
+  overflow: hidden;
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.stint-seg span {
+  padding: 0 6px;
+  white-space: nowrap;
+}
+
+.stint-gap { min-width: 0; }
+
+.stint-empty {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  padding: 0 12px;
+  color: var(--muted);
+  font-size: 0.8rem;
+}
+
+.stint-legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 14px;
+  margin-top: 12px;
+  color: var(--ink-2);
+  font-size: 0.8rem;
+  font-weight: 600;
+}
+
+.stint-key {
+  display: inline-flex;
+  align-items: center;
+}
+
+#strategy-tiles .tile .value {
+  font-size: 1.35rem;
+  overflow-wrap: anywhere;
 }
 
 /* ---- Focus rings (a11y) ----------------------------------------------------- */

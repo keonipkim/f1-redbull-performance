@@ -53,6 +53,23 @@ function driverColor(driverId) {
   return cssVar(DRIVER_SLOT[driverId] || "--series-other");
 }
 
+/** Tyre compound → colour and ink. Unknown compounds use the neutral pair. */
+const COMPOUND_SLOT = {
+  SOFT: "--tyre-soft",
+  MEDIUM: "--tyre-medium",
+  HARD: "--tyre-hard",
+  INTERMEDIATE: "--tyre-intermediate",
+  WET: "--tyre-wet",
+};
+
+function compoundColor(name) {
+  return cssVar(COMPOUND_SLOT[name] || "--tyre-unknown");
+}
+
+function compoundInk(name) {
+  return cssVar(`${COMPOUND_SLOT[name] || "--tyre-unknown"}-ink`);
+}
+
 /** Ordinal ramp for the finish-distribution doughnut (best → worst bucket). */
 function ordinalRamp() {
   return [cssVar("--ord-1"), cssVar("--ord-2"), cssVar("--ord-3"), cssVar("--ord-4")];

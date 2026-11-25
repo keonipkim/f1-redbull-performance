@@ -10,6 +10,7 @@ Built as a single-page application using vanilla HTML, CSS, and JavaScript.
 - Head-to-head comparison of any two team drivers in a season
 - Driver performance explorer with places gained/lost analysis
 - Circuit-by-circuit historical performance
+- Race strategy from 2023 onward: tyre stints, pit stops, and session weather
 - Interactive visualizations including line charts, stacked bars, radar, and doughnut charts
 - Responsive design with light/dark theme support (dark by default)
 
@@ -24,7 +25,7 @@ https://keonikim.com/f1-redbull-performance/
 ### Data Source
 Per-race records compiled from official Formula 1 results via the open [Jolpica/Ergast](https://api.jolpi.ca/ergast/) motorsport results database, cross-checked against [Formula1.com results](https://www.formula1.com/en/results). Season and championship statistics are computed client-side from the raw race records. 2026 data runs through the Las Vegas Grand Prix (round 21 of 23). Monaco 2026 uses the FIA International Court of Appeal classification of 4 September 2026.
 
-Supporting references: [OpenF1](https://openf1.org/) (telemetry), [FIA documents](https://www.fia.com/documents), [Jolpica-F1 repo](https://github.com/jolpica/jolpica-f1). The original Ergast API is deprecated past 2024.
+Supporting references: [OpenF1](https://openf1.org/) (tyre stints, pit stops, and race weather from 2023 onward, synced into this file), [FIA documents](https://www.fia.com/documents), [Jolpica-F1 repo](https://github.com/jolpica/jolpica-f1). The original Ergast API is deprecated past 2024. Jolpica remains the source for results and championship points. OpenF1 does not cover 2021–2022.
 
 ### Refreshing after a Grand Prix
 Sync the latest Red Bull race/sprint results and championship standings into `data/f1-data.json`:
@@ -41,13 +42,32 @@ python3 scripts/sync-jolpica.py --season 2026
 python3 scripts/sync-jolpica.py --check
 ```
 
-The script preserves editorial DNF notes, radar profiles, and photo paths. After a good sync, commit and push — this repo is a static GitHub Pages site, so **the live site updates only when the updated JSON is on `main`** (Pages rebuilds after the push; CDN may take a few minutes).
+The script preserves editorial DNF notes, radar profiles, photo paths, and any OpenF1 strategy already stored on a race. After a good sync, commit and push — this repo is a static GitHub Pages site, so **the live site updates only when the updated JSON is on `main`** (Pages rebuilds after the push; CDN may take a few minutes).
 
 ```bash
 git add data/f1-data.json
 git commit -m "Data: sync 2026 through latest GP"
 git push origin main
 ```
+
+### Race strategy (2023 onward)
+
+Tyre stints, pit-stop timing, and a one-line weather summary come from the public [OpenF1](https://openf1.org/) API. They are stored on each 2023+ race in `data/f1-data.json` and do not replace Jolpica results. The page never calls OpenF1 itself.
+
+After a Jolpica sync for a new Grand Prix, pull strategy for that season (or leave `--season` off to refresh 2023 onward):
+
+```bash
+# See what would change (no write)
+python3 scripts/sync-openf1.py --dry-run --season 2026
+
+# Write strategy onto the race records
+python3 scripts/sync-openf1.py --season 2026
+
+# Exit 0 when every matched race already has strategy
+python3 scripts/sync-openf1.py --check
+```
+
+A full refresh waits about two seconds between requests, so 2023–2026 takes roughly 10–15 minutes. Then commit and push the JSON the same way as a results sync. The live site updates only from that push.
 
 ### Media
 Driver portraits and car shots live under `assets/drivers/` and `assets/cars/`. Paths are optional fields on each season driver (`photo`, plus `carImage` / `car` when that driver should not share the season chassis shot) and season (`carImage`). Images are Wikimedia Commons sources used for illustration; replace with your own assets as needed.

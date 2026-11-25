@@ -7,6 +7,7 @@ Preserves hand-authored fields:
   - profiles, photos, carImage, car name, partial-season rounds windows
   - per-result status / note text when the same round+driver still exists
   - pit-lane grid (0) when a preserved note mentions pit-lane
+  - OpenF1 strategy blocks on the race and on each driver result
 
 Usage:
   python3 scripts/sync-jolpica.py              # current (latest) season in the file
@@ -359,8 +360,11 @@ def build_races(
             "circuit": circuit,
             "date": race["date"],
             "winner": winners.get(rnd) or old.get("winner") or "",
-            "results": {},
         }
+        # OpenF1 strategy is owned by sync-openf1.py; keep it across a results refresh.
+        if old.get("strategy"):
+            entry["strategy"] = old["strategy"]
+        entry["results"] = {}
 
         for res in race["Results"]:
             did = map_driver(res["Driver"]["driverId"])
@@ -412,6 +416,8 @@ def build_races(
                 # Dataset convention: pit-lane starts use grid 0
                 if "pit-lane" in old_res["note"].lower() or "pit lane" in old_res["note"].lower():
                     result["grid"] = 0
+            if old_res.get("strategy"):
+                result["strategy"] = old_res["strategy"]
 
             entry["results"][did] = result
 

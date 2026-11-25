@@ -50,6 +50,7 @@
       <button class="tab" role="tab" data-view="drivers" aria-selected="false">Drivers &amp; Races</button>
       <button class="tab" role="tab" data-view="compare" aria-selected="false">Head to Head</button>
       <button class="tab" role="tab" data-view="circuits" aria-selected="false">Circuits</button>
+      <button class="tab" role="tab" data-view="strategy" aria-selected="false">Strategy</button>
     </div>
   </nav>
 
@@ -215,6 +216,45 @@
           <h3>Results at this circuit</h3>
           <p class="sub">All dataset events at the selected venue</p>
           <div id="table-circuit"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- =================== Strategy =================== -->
+    <section id="view-strategy" class="view" hidden>
+      <div class="view-intro">
+        <h2>Race strategy</h2>
+        <p id="strategy-sub"></p>
+      </div>
+
+      <div class="subfilter">
+        <label for="race-select">Race</label>
+        <select id="race-select" class="select" aria-label="Select race"></select>
+      </div>
+
+      <div id="strategy-empty" class="notice" hidden></div>
+
+      <div id="strategy-body" hidden>
+        <div id="strategy-tiles" class="tiles"></div>
+
+        <div class="grid-2">
+          <div class="card full">
+            <h3>Tyre stints</h3>
+            <p class="sub">Each bar is the scheduled race distance. A shorter bar is a car that stopped early.</p>
+            <div id="stint-timeline"></div>
+          </div>
+
+          <div class="card full" id="strategy-pits-card">
+            <h3>Pit stop duration</h3>
+            <p class="sub">Stationary time in seconds. OpenF1 records this from the 2024 United States Grand Prix onward.</p>
+            <div class="chart-box"><canvas id="chart-pits"></canvas></div>
+          </div>
+
+          <div class="card full">
+            <h3>Stints and stops</h3>
+            <p class="sub">Lane is the full pit-lane pass. Stop is the stationary time when it was recorded.</p>
+            <div id="table-strategy"></div>
+          </div>
         </div>
       </div>
     </section>
